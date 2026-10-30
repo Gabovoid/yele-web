@@ -1,0 +1,66 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/images/Logo_png.png";
+---
+<footer class="w-full bg-[#1B313A] text-white mt-15 py-12 px-4 sm:px-8 md:px-16">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12 md:gap-8">
+    <!-- 1: logo-->
+    <div class="flex flex-col items-center text-center">
+      <a href="/" class="flex items-center space-x-2 shrink-0 mb-4">
+        <Image src={logo} alt="logo" class="h-30 w-45" format="png" />
+      </a>
+      <h4 class="font-semibold text-1xl max-w-60">PRODUCTOS Y SERVICIOS GENERALES YELE S.A.C</h4>
+      <p class="mt-5 text-justify text-sm max-w-80">Servicios de Tecnología, Redes y Comunicaciones, Ingeniería Eléctrica, Servicios de Automatización y Smart Security</p>
+    </div>
+    <!-- 2: contacta -->
+    <div class="flex flex-col items-center md:items-start text-center md:text-left">
+      <h1 class="font-semibold text-xl mb-2">Contactos</h1>
+        <div class="flex items-start gap-2 text-sm mt-5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone-icon lucide-phone"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
+          <div class="flex flex-col gap-0.5">
+            <span>+51 935862918</span>
+            <span>+51 941 246 911</span>
+          </div>
+        </div>
+        <div class="flex gap-2 text-sm mt-5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail-icon lucide-mail"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+          <div class="flex flex-col gap-0.5">
+            <span>lauroflores@yele.com.pe</span>
+            <span>administracion@yele.com.pe</span>
+            <span>informes@yele.com.pe</span>
+          </div>
+        </div>
+    </div>
+    <!-- 3: ubicacion -->
+    <div class="flex flex-col items-center lg:space-x-38 md:items-start text-center md:text-left">
+      <h3 class="font-semibold text-xl mb-2">Ubicación</h3>
+      <div class="flex gap-4 justify-center mt-4 md:justify-start flex-wrap">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.9105749173036!2d-77.03722542517362!3d-12.118270888124137!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c83d444f9753%3A0x8255648301793661!2sEl%C3%ADas%20Aguirre%20180%2C%20Miraflores%2015074!5e0!3m2!1ses!2spe!4v1772856612909!5m2!1ses!2spe" width="500" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+
+  </div>
+
+  <!--copyright -->
+  <div class="flex items-center justify-between mt-8 border-t border-gray-700 pt-4 px-5">
+    <div class= "text-center text-white text-sm">
+      &copy; 2026 Todos los derechos reservados.
+    </div>
+  <!--redes sociales -->
+
+  <div class="flex flex-col items-center lg:space-x-32 md:items-start text-center md:text-left">
+      <h3 class="font-semibold mb-2">Síguenos</h3>
+      <div class="flex gap-4 justify-center md:justify-start flex-wrap">
+        <a href="https://www.facebook.com/yele.sac" target="_blank" class="hover:text-gray-400 transition ">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook-icon lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/company/yelesac/" target="_blank" class="hover:text-gray transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin-icon lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@yelesac259" target="_blank" class="hover:text-gray-400 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube-icon lucide-youtube"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
