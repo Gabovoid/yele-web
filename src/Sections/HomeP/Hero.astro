@@ -1,0 +1,40 @@
+---
+import { Image } from "astro:assets";
+import H1 from "../../assets/images/Home/Hero/Hero_image.webp";
+---
+
+<section class="relative isolate min-h-150 overflow-hidden bg-yeledarkblue md:min-h-150">
+
+  <!--banner-->
+  <Image
+    src={H1}
+    alt="Técnico trabajando en instalaciones eléctricas"
+    class="absolute inset-0 z-0 h-full w-full object-cover object-[center_40%]"
+    format="webp"
+  />
+
+  <!--fondo azul-->
+  <div class="absolute inset-0 z-10 bg-linear-to-r from-yeledarkblue/95 via-yeledarkblue/80 to-yeledarkblue/30"></div>
+
+  <!--texto-->
+  <div class="relative z-20 mx-auto flex min-h-150 max-w-6xl flex-col justify-center px-6 py-16 md:min-h-150 md:-translate-x-40">
+    <p class="text-sm font-bold uppercase tracking-wide text-yeleorange">
+      Soluciones eléctricas
+    </p>
+
+    <h1 class="mt-2 text-4xl font-extrabold leading-tight text-white md:text-6xl">
+      Energía que<br />
+      impulsa <span class="text-yeleorange">tus proyectos</span>
+    </h1>
+
+    <p class="mt-5 max-w-md text-[15px] leading-relaxed text-white/90">
+      Instalaciones eléctricas, mantenimiento y proyectos a la medida de tus
+      necesidades. Seguridad, eficiencia y compromiso en cada trabajo.
+    </p>
+
+    <a class="mt-7 inline-flex w-fit items-center gap-2 rounded-lg bg-yeleorange px-7 py-3 text-sm font-semibold text-white transition hover:bg-yelelightblue">
+      Conoce más
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right preview-icon"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
