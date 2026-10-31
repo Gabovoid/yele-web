@@ -1,0 +1,124 @@
+---
+import { Image } from "astro:assets";
+import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
+---
+
+<section id="proyectos" class="bg-yelewhiteblue py-14">
+  <div class="mx-auto max-w-6xl px-6">
+
+    <!-- Encabezado -->
+    <div class="flex items-end justify-between">
+      <div>
+        <span class="mb-2 block h-0.5 w-9 bg-yeleorange"></span>
+
+        <h2 class="text-3xl font-extrabold text-yeledarkblue">
+          Proyectos
+        </h2>
+      </div>
+
+      <a
+        href="/proyectos"
+        class="inline-flex items-center gap-2 text-xs font-medium text-yeledarkblue transition hover:text-yeleorange"
+      >
+        Ver todos
+        <span class="text-lg text-yeleorange">&gt;</span>
+      </a>
+    </div>
+
+    <!--contenedor-->
+    <div data-projects-slider class="relative mt-8">
+
+      <!--izquierda -->
+      <button type="button" data-direction="left" aria-label="Proyectos anteriores" class="absolute -left-4 cursor-pointer top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-yeleblue text-white shadow-md transition hover:bg-yeleorange">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left preview-icon"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+
+      <div data-projects-track class="projects-track grid grid-flow-col gap-8 overflow-x-auto scroll-smooth">
+        {ProjectsYele.map((project) => (
+          <article class="overflow-hidden rounded-xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+            <div class="h-56 overflow-hidden">
+              <Image
+                src={project.image}
+                alt={project.alt ?? project.title}
+                loading="lazy"
+                class="h-full w-full object-cover transition duration-500 hover:scale-105"
+                format="webp"
+              />
+            </div>
+
+            <div class="p-5">
+              <p class="text-xs font-medium text-yeleblue">
+                {project.Tipo}
+              </p>
+              <h3 class="mt-2 text-base font-bold text-yeledarkblue">
+                {project.title}
+              </h3>
+              <p class="mt-1 text-sm text-slate-500">
+                {project.Lugar}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!--derecha -->
+      <button type="button" data-direction="right" aria-label="Proyectos siguientes" class="absolute -right-4 cursor-pointer top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-yeleblue text-white shadow-md transition hover:bg-yeleorange">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right preview-icon"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .projects-track {
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    grid-auto-columns: 100%;
+  }
+
+  .projects-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .projects-track > article {
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 640px) {
+    .projects-track {
+      grid-auto-columns: calc((100% - 2rem) / 2);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .projects-track {
+      grid-auto-columns: calc((100% - 4rem) / 3);
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll("[data-projects-slider]").forEach((slider) => {
+    const track = slider.querySelector("[data-projects-track]");
+    const leftButton = slider.querySelector('[data-direction="left"]');
+    const rightButton = slider.querySelector('[data-direction="right"]');
+
+    if (!track || !leftButton || !rightButton) return;
+
+    leftButton.addEventListener("click", () => {
+      track.scrollBy({
+        left: -track.clientWidth,
+        behavior: "smooth",
+      });
+    });
+
+    rightButton.addEventListener("click", () => {
+      track.scrollBy({
+        left: track.clientWidth,
+        behavior: "smooth",
+      });
+    });
+  });
+</script>
