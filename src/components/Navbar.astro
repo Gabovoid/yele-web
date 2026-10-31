@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/images/Logo_webp.webp";
+
+const links = [
+  { label: "Inicio", href: "/" },
+  { label: "Nosotros", href: "/nosotros" },
+  { label: "Proyectos", href: "/proyectos" },
+];
+---
+
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100">
+  <div class="mx-auto flex h-19 max-w-6xl items-center justify-between px-6">
+    <!-- 1: logo-->
+     <a href="/" class="flex items-center gap-2.5">
+      <Image
+        src={logo}
+        alt="Logo"
+        class="h-15 w-25"
+        format="webp"
+      />
+    </a>
+    <!-- 1: nav-->
+    <nav class="hidden md:flex items-center gap-10 text-[16px] font-semibold text-yeledarkblue">
+      {
+        links.map((l, i) => (
+          <a
+            href={l.href}
+            class:list={[
+              'relative py-1 transition-colors hover:text-yeleorange',
+              i === 0 && 'text-yeleorange after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:bg-yeleorange',
+            ]}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- 1: contactar-->
+    <a class="hidden md:inline-flex cursor-pointer items-center gap-2 rounded-lg bg-yeleblue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-yeledarkblue">
+        Contactar 
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right preview-icon"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+ </div>
+</header>
