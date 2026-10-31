@@ -1,0 +1,53 @@
+---
+import { Image } from "astro:assets";
+import AboutHP from "../../assets/images/Home/AboutHP/AboutHP.webp";
+---
+
+<section class="bg-white py-16">
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-2">
+
+    <div>
+      <p class="flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-yeledarkblue">
+        <span class="h-0.5 w-9 bg-yeleorange"></span>
+        ¿Quiénes somos?
+      </p>
+
+      <h2 class="mt-4 text-3xl font-extrabold leading-tight text-yeleblue md:text-[34px]">
+        Comprometidos con<br />
+        la energía de tu hogar<br />
+        y empresa
+      </h2>
+
+      <p class="mt-4 max-w-sm text-[15px] leading-relaxed text-slate-500">
+        Somos una empresa especializada en trabajos eléctricos, con un equipo técnico calificado
+        y experiencia en proyectos residenciales, comerciales e industriales.
+      </p>
+
+      <a class="mt-6 cursor-pointer inline-flex items-center gap-2 rounded-lg border-2 border-yeleblue px-6 py-2.5 text-sm font-semibold text-yelebluetransition hover:bg-yeleblue hover:text-white">
+        Conoce más
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right preview-icon"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="relative mr-6 mb-6">
+
+      <div class="absolute -bottom-6 -right-6 left-24 top-8 rounded-2xl bg-yeleorange"></div>
+      <Image
+        src={AboutHP}
+        alt="AboutHP image"
+        class="relative aspect-[1.77] w-full rounded-2xl object-cover shadow-lg"
+        format="webp"
+      />
+      <div class="absolute -right-6 top-20 flex items-center gap-4 rounded-2xl bg-yeleblue px-6 py-5 text-white shadow-xl">
+
+        <ul class="text-sm font-semibold leading-snug">
+          <li>Eficiencia</li>
+          <li>Seguridad</li>
+          <li>Confianza</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+</section>
