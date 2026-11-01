@@ -1,4 +1,3 @@
-
 ---
 /* ─────────────────────────────────────────────
    ICONOS LUCIDE
@@ -51,6 +50,9 @@ type PersonalField = {
   icon: string;
   ac: string;
   pattern?: string;
+  title?: string;
+  maxlength?: number;
+  inputmode?: 'numeric' | 'email' | 'text';
 };
 
 const personal: PersonalField[] = [
@@ -61,6 +63,7 @@ const personal: PersonalField[] = [
     ph: 'Ej. Juan Pérez',
     icon: 'user',
     ac: 'given-name',
+    maxlength: 80,
   },
   {
     id: 'apellidos',
@@ -69,6 +72,7 @@ const personal: PersonalField[] = [
     ph: 'Ej. García López',
     icon: 'user',
     ac: 'family-name',
+    maxlength: 80,
   },
   {
     id: 'correo',
@@ -77,15 +81,24 @@ const personal: PersonalField[] = [
     ph: 'ejemplo@correo.com',
     icon: 'mail',
     ac: 'email',
+    // exige usuario@dominio.ext (no deja pasar "juan@gmail")
+    pattern: '[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}',
+    title: 'Ingresa un correo válido, por ejemplo nombre@correo.com',
+    maxlength: 150,
+    inputmode: 'email',
   },
   {
     id: 'telefono',
     label: 'Teléfono',
     type: 'tel',
-    ph: '+51 987 654 321',
+    ph: '987654321',
     icon: 'phone',
     ac: 'tel',
-    pattern: '[0-9+\\s]{9,15}',
+    // celular peruano: 9 dígitos y empieza con 9
+    pattern: '9[0-9]{8}',
+    title: 'Ingresa un celular de 9 dígitos que empiece con 9',
+    maxlength: 9,
+    inputmode: 'numeric',
   },
 ];
 
@@ -127,13 +140,22 @@ const motivos = [
     </h2>
 
 
-    <form id="agenda-form" novalidate class="mt-6">
+    <form id="agenda-form" novalidate class="relative mt-6">
 
       <!-- VALORES SELECCIONADOS -->
 
       <input type="hidden" name="fecha" id="fecha" />
       <input type="hidden" name="hora" id="hora" />
 
+      <!-- HONEYPOT anti-spam: las personas no lo ven, los bots lo rellenan -->
+      <input
+        type="text"
+        name="website"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+        class="absolute left-[-9999px] h-0 w-0 opacity-0"
+      />
 
       <!-- ═══════════════════════════════════════
            PASO 1
@@ -207,8 +229,8 @@ const motivos = [
 
 
             <p class="mt-3 text-[11px] text-slate-400">
-              Atendemos de lunes a sábado. Reserva con al menos 1 día de anticipación.
-              Máximo 3 visitas por día.
+              Lunes a viernes: 3 horarios por día. Sábados: 2 horarios.
+              Reserva con al menos 1 día de anticipación.
             </p>
 
           </div>
@@ -323,6 +345,9 @@ const motivos = [
                     autocomplete={f.ac}
                     placeholder={f.ph}
                     pattern={f.pattern}
+                    title={f.title}
+                    maxlength={f.maxlength}
+                    inputmode={f.inputmode}
                     class={input}
                   />
 
@@ -350,6 +375,8 @@ const motivos = [
                 name="direccion"
                 type="text"
                 required
+                minlength="5"
+                maxlength="200"
                 autocomplete="street-address"
                 placeholder="Ej. Av. Principal 123, Lima"
                 class={input}
@@ -467,6 +494,7 @@ const motivos = [
                 rows="4"
                 required
                 minlength="10"
+                maxlength="1000"
                 placeholder="Cuéntanos más sobre tu proyecto, requerimientos o alguna observación adicional..."
                 class={`${input} resize-y`}
               ></textarea>
@@ -577,11 +605,15 @@ const motivos = [
   // CONFIGURACIÓN
   // ═════════════════════════════════════════════
 
-  const SLOTS = [
-    '08:00',
-    '10:00',
-    '15:00',
-  ];
+  // Horarios por día de la semana (0 = domingo ... 6 = sábado)
+  const HORARIOS_POR_DIA: Record<number, string[]> = {
+    1: ['08:00', '12:00', '16:00'],
+    2: ['08:00', '12:00', '16:00'],
+    3: ['08:00', '12:00', '16:00'],
+    4: ['08:00', '12:00', '16:00'],
+    5: ['08:00', '12:00', '16:00'],
+    6: ['08:00', '12:00'],
+  };
 
   const MAX_DAYS_AHEAD = 60;
 
@@ -652,6 +684,26 @@ const motivos = [
   const horaInput =
     $('hora') as HTMLInputElement;
 
+  const telInput =
+    $('telefono') as HTMLInputElement;
+
+
+  // ═════════════════════════════════════════════
+  // TELÉFONO:
+  // ═════════════════════════════════════════════
+
+  telInput.addEventListener(
+    'input',
+    () => {
+
+      telInput.value =
+        telInput.value
+          .replace(/\D/g, '')
+          .slice(0, 9);
+
+    }
+  );
+
 
   // ═════════════════════════════════════════════
   // ESTADO
@@ -712,37 +764,14 @@ const motivos = [
     ).format(d);
 
 
-  // ═════════════════════════════════════════════
-  // DISPONIBILIDAD SIMULADA
-  // ═════════════════════════════════════════════
+
 
   function getAvailableSlots(date: Date): string[] {
 
-    const day =
-      date.getDate();
+    return [
+      ...(HORARIOS_POR_DIA[date.getDay()] ?? []),
+    ];
 
-    const month =
-      date.getMonth() + 1;
-
-    const seed =
-      day + month;
-
-    if (seed % 11 === 0) {
-      return [];
-    }
-
-    if (seed % 7 === 0) {
-      return ['15:00'];
-    }
-
-    if (seed % 5 === 0) {
-      return [
-        '08:00',
-        '15:00',
-      ];
-    }
-
-    return [...SLOTS];
   }
 
 
@@ -1122,7 +1151,7 @@ const motivos = [
 
 
   // ═════════════════════════════════════════════
-  // ENVÍO SIMULADO
+  // ENVÍO AL SERVIDOR
   // ═════════════════════════════════════════════
 
   form.addEventListener(
@@ -1171,10 +1200,45 @@ const motivos = [
 
       try {
 
-        await new Promise(
-          (resolve) =>
-            setTimeout(resolve, 1500)
-        );
+        const res =
+          await fetch(
+            '/api/agendar',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(
+                Object.fromEntries(
+                  new FormData(form)
+                )
+              ),
+            }
+          );
+
+        const data =
+          await res
+            .json()
+            .catch(() => ({}));
+
+        if (!res.ok) {
+
+          if (res.status === 409) {
+            selTime = null;
+            renderSlots();
+          }
+
+          const primerError =
+            data.errores
+              ? Object.values(data.errores).flat()[0]
+              : null;
+
+          throw new Error(
+            (primerError as string) ||
+            data.error ||
+            'No pudimos procesar tu solicitud. Inténtalo nuevamente.'
+          );
+        }
 
         form.classList.add('hidden');
 
@@ -1191,24 +1255,22 @@ const motivos = [
       } catch (error) {
 
         errorBox.textContent =
-          'No pudimos procesar tu solicitud. Inténtalo nuevamente.';
+          error instanceof Error
+            ? error.message
+            : 'No pudimos procesar tu solicitud. Inténtalo nuevamente.';
 
         errorBox.classList.remove('hidden');
 
         btnText.textContent =
           'Enviar solicitud';
 
-        btn.disabled = false;
+        updateState();
 
       }
 
     }
   );
 
-
-  // ═════════════════════════════════════════════
-  // INICIALIZACIÓN
-  // ═════════════════════════════════════════════
 
   renderCalendar();
 
