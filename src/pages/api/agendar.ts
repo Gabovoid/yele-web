@@ -7,10 +7,12 @@ export const prerender = false;
 const sql = postgres(import.meta.env.DATABASE_URL, { prepare: false });
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
     user: import.meta.env.GMAIL_USER,
-    pass: import.meta.env.GMAIL_APP_PASSWORD, // contraseña de aplicación
+    pass: import.meta.env.GMAIL_APP_PASSWORD,
   },
 });
 
@@ -22,12 +24,14 @@ const esc = (s: string) =>
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
+  
     headers: { 'Content-Type': 'application/json' },
   });
 
 export const POST: APIRoute = async ({ request }) => {
   let body: Record<string, unknown>;
   try {
+    
     body = await request.json();
   } catch {
     return json({ error: 'Solicitud inválida' }, 400);
