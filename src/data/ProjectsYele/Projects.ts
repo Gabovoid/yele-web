@@ -10,6 +10,7 @@ interface Project {
   Lugar: string;
   image: ImageMetadata;
   alt?: string;
+  description: string;
 }
 
 export const ProjectsYele: Project[] = [
@@ -19,15 +20,17 @@ export const ProjectsYele: Project[] = [
     Tipo: "Residencial",
     Lugar: "Miraflores - Lima",
     image: P1_1,
-    alt: "Project 1 image",
+    alt: "Instalación de luminarias",
+    description: "Instalación de luminarias para mejorar la iluminación y funcionalidad de los espacios.",
   },
   {
     id: 2,
-    title: "Elaboracion de Pozo a Tierra",
+    title: "Elaboración de pozo a tierra",
     Tipo: "Residencial",
-    Lugar: "San Martin de Porres - Lima",
+    Lugar: "San Martín de Porres - Lima",
     image: P2_1,
-    alt: "Project 2 image",
+    alt: "Elaboración de pozo a tierra",
+    description: "Implementación de un sistema de puesta a tierra para brindar protección y seguridad eléctrica.",
   },
   {
     id: 3,
@@ -35,17 +38,16 @@ export const ProjectsYele: Project[] = [
     Tipo: "Industrial",
     Lugar: "Ate - Lima",
     image: P3_1,
-    alt: "Project 3 image",
+    alt: "Entubado EMT en altura",
+    description: "Instalación de tuberías EMT en altura para proteger y organizar las canalizaciones eléctricas.",
   },
   {
     id: 4,
-    title: "Montaje de tablero de eléctrico",
+    title: "Montaje de tablero eléctrico",
     Tipo: "Industrial",
     Lugar: "Ate - Lima",
     image: P4_1,
-    alt: "Project 4 image",
+    alt: "Montaje de tablero eléctrico",
+    description: "Montaje de tablero eléctrico para la distribución y control seguro de la energía.",
   },
-  
-
 ];
-export {};
