@@ -10,6 +10,7 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
     <div class="flex items-end justify-between">
       <div>
         <span class="mb-2 block h-0.5 w-9 bg-yeleorange"></span>
+
         <h2 class="text-3xl font-extrabold text-yeledarkblue">
           Proyectos
         </h2>
@@ -42,16 +43,19 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
       <!-- Tarjetas -->
       <div
         data-projects-track
-        class="projects-track grid grid-flow-col gap-8 overflow-x-auto scroll-smooth"
+        class="grid grid-flow-col auto-cols-[100%] gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none [&::-webkit-scrollbar]:hidden sm:auto-cols-[calc((100%-2rem)/2)] lg:auto-cols-[calc((100%-4rem)/3)]"
       >
         {ProjectsYele.map((project) => (
           <article
             data-project-card
+            data-type={project.Tipo}
+            data-title={project.title}
+            data-location={project.Lugar}
             data-description={project.description}
             tabindex="0"
             role="button"
             aria-label={`Ver detalles de ${project.title}`}
-            class="cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-yeleorange"
+            class="snap-start cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-yeleorange"
           >
             <div class="h-56 overflow-hidden">
               <Image
@@ -102,7 +106,7 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
   aria-label="Detalles del proyecto"
   class="m-auto w-[min(92vw,700px)] max-w-none overflow-visible rounded-2xl bg-transparent p-0 text-left shadow-none backdrop:bg-slate-950/55 backdrop:backdrop-blur-[2px]"
 >
-  <div class="relative overflow-hidden rounded-2xl bg-white shadow-2xl">
+  <div class="relative max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl">
 
     <!-- Cerrar -->
     <button
@@ -117,68 +121,26 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
       </svg>
     </button>
 
-    <!-- Imagen dinámica -->
-    <div
-      data-modal-image
-      class="h-64 overflow-hidden sm:h-80"
-    ></div>
+    <!-- Imagen -->
+    <div data-modal-image class="h-64 overflow-hidden sm:h-80"></div>
 
     <!-- Información -->
     <div class="p-6 sm:p-8">
-      <span
-        data-modal-type
-        class="text-xs font-semibold uppercase tracking-wider text-yeleorange"
-      ></span>
+      <span data-modal-type class="text-xs font-semibold uppercase tracking-wider text-yeleorange"></span>
 
-      <h3
-        data-modal-title
-        class="mt-2 text-2xl font-extrabold text-yeledarkblue"
-      ></h3>
+      <h3 data-modal-title class="mt-2 text-2xl font-extrabold text-yeledarkblue"></h3>
 
-      <p
-        data-modal-location
-        class="mt-2 text-sm text-slate-500"
-      ></p>
+      <p data-modal-location class="mt-2 text-sm text-slate-500"></p>
 
       <div class="my-5 h-px bg-slate-100"></div>
 
-      <p
-        data-modal-description
-        class="text-sm leading-relaxed text-slate-600"
-      ></p>
+      <p data-modal-description class="text-sm leading-relaxed text-slate-600"></p>
     </div>
   </div>
 </dialog>
 
-<style>
-  .projects-track {
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    grid-auto-columns: 100%;
-  }
-
-  .projects-track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .projects-track > article {
-    scroll-snap-align: start;
-  }
-
-  @media (min-width: 640px) {
-    .projects-track {
-      grid-auto-columns: calc((100% - 2rem) / 2);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .projects-track {
-      grid-auto-columns: calc((100% - 4rem) / 3);
-    }
-  }
-</style>
-
 <script>
+  // Navegación del slider
   document.querySelectorAll("[data-projects-slider]").forEach((slider) => {
     const track = slider.querySelector("[data-projects-track]");
     const leftButton = slider.querySelector('[data-direction="left"]');
@@ -201,7 +163,7 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
     });
   });
 
-  // Ventana ampliada de proyectos
+  // Ventana ampliada
   const dialog = document.querySelector<HTMLDialogElement>(
     "[data-project-dialog]"
   );
@@ -234,17 +196,10 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
 
       modalImage.replaceChildren(imageClone);
 
-      modalType.textContent =
-        card.querySelector("div + div p")?.textContent?.trim() ?? "";
-
-      modalTitle.textContent =
-        card.querySelector("h3")?.textContent?.trim() ?? "";
-
-      modalLocation.textContent =
-        card.querySelector("div + div p:last-child")?.textContent?.trim() ?? "";
-
-      modalDescription.textContent =
-        card.dataset.description ?? "";
+      modalType.textContent = card.dataset.type ?? "";
+      modalTitle.textContent = card.dataset.title ?? "";
+      modalLocation.textContent = card.dataset.location ?? "";
+      modalDescription.textContent = card.dataset.description ?? "";
 
       dialog.showModal();
     };
@@ -265,7 +220,7 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
       dialog.close();
     });
 
-    // Cerrar haciendo clic fuera de la tarjeta
+    // Cerrar al hacer clic fuera de la tarjeta
     dialog.addEventListener("click", (event) => {
       if (event.target === dialog) {
         dialog.close();
