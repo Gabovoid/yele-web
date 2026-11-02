@@ -17,6 +17,7 @@
     "astro": "^7.4.4",
     "nodemailer": "^10.3.1",
     "postgres": "^4.0.0",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "zod": "^4.6.7"
   },

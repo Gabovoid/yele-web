@@ -16,25 +16,47 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
         </h2>
       </div>
 
-      <a href="/proyectos" class="inline-flex items-center gap-2 text-xs font-medium text-yeledarkblue transition hover:text-yeleorange"
+      <a
+        href="/proyectos"
+        class="inline-flex items-center gap-2 text-xs font-medium text-yeledarkblue transition hover:text-yeleorange"
       >
         Ver todos
         <span class="text-lg text-yeleorange">&gt;</span>
       </a>
     </div>
 
-    <!--contenedor-->
+    <!-- Slider -->
     <div data-projects-slider class="relative mt-8">
 
-      <!--izquierda -->
-      <button type="button" data-direction="left" aria-label="Proyectos anteriores" class="absolute -left-4 cursor-pointer top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-yeleblue text-white shadow-md transition hover:bg-yeleorange">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left preview-icon"><path d="m15 18-6-6 6-6"/></svg>
+      <!-- Anterior -->
+      <button
+        type="button"
+        data-direction="left"
+        aria-label="Proyectos anteriores"
+        class="absolute -left-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-yeleblue text-white shadow-md transition hover:bg-yeleorange"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
       </button>
 
-      <div data-projects-track class="projects-track grid grid-flow-col gap-8 overflow-x-auto scroll-smooth">
+      <!-- Tarjetas -->
+      <div
+        data-projects-track
+        class="grid grid-flow-col auto-cols-[100%] gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-none [&::-webkit-scrollbar]:hidden sm:auto-cols-[calc((100%-2rem)/2)] lg:auto-cols-[calc((100%-4rem)/3)]"
+      >
         {ProjectsYele.map((project) => (
-          <article class="overflow-hidden rounded-xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-
+          <article
+            data-project-card
+            data-type={project.Tipo}
+            data-title={project.title}
+            data-location={project.Lugar}
+            data-description={project.description}
+            tabindex="0"
+            role="button"
+            aria-label={`Ver detalles de ${project.title}`}
+            class="snap-start cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-yeleorange"
+          >
             <div class="h-56 overflow-hidden">
               <Image
                 src={project.image}
@@ -49,9 +71,11 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
               <p class="text-xs font-medium text-yeleblue">
                 {project.Tipo}
               </p>
+
               <h3 class="mt-2 text-base font-bold text-yeledarkblue">
                 {project.title}
               </h3>
+
               <p class="mt-1 text-sm text-slate-500">
                 {project.Lugar}
               </p>
@@ -60,44 +84,63 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
         ))}
       </div>
 
-      <!--derecha -->
-      <button type="button" data-direction="right" aria-label="Proyectos siguientes" class="absolute -right-4 cursor-pointer top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-yeleblue text-white shadow-md transition hover:bg-yeleorange">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right preview-icon"><path d="m9 18 6-6-6-6"/></svg>
+      <!-- Siguiente -->
+      <button
+        type="button"
+        data-direction="right"
+        aria-label="Proyectos siguientes"
+        class="absolute -right-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-yeleblue text-white shadow-md transition hover:bg-yeleorange"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
       </button>
 
     </div>
   </div>
 </section>
 
-<style>
-  .projects-track {
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    grid-auto-columns: 100%;
-  }
+<!-- VENTANA AMPLIADA -->
+<dialog
+  data-project-dialog
+  aria-label="Detalles del proyecto"
+  class="m-auto w-[min(92vw,700px)] max-w-none overflow-visible rounded-2xl bg-transparent p-0 text-left shadow-none backdrop:bg-slate-950/55 backdrop:backdrop-blur-[2px]"
+>
+  <div class="relative max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl">
 
-  .projects-track::-webkit-scrollbar {
-    display: none;
-  }
+    <!-- Cerrar -->
+    <button
+      type="button"
+      data-close-dialog
+      aria-label="Cerrar detalles"
+      class="absolute right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white/95 text-yeledarkblue shadow-md transition hover:bg-yeleorange hover:text-white"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6 6 18"/>
+        <path d="m6 6 12 12"/>
+      </svg>
+    </button>
 
-  .projects-track > article {
-    scroll-snap-align: start;
-  }
+    <!-- Imagen -->
+    <div data-modal-image class="h-64 overflow-hidden sm:h-80"></div>
 
-  @media (min-width: 640px) {
-    .projects-track {
-      grid-auto-columns: calc((100% - 2rem) / 2);
-    }
-  }
+    <!-- Información -->
+    <div class="p-6 sm:p-8">
+      <span data-modal-type class="text-xs font-semibold uppercase tracking-wider text-yeleorange"></span>
 
-  @media (min-width: 1024px) {
-    .projects-track {
-      grid-auto-columns: calc((100% - 4rem) / 3);
-    }
-  }
-</style>
+      <h3 data-modal-title class="mt-2 text-2xl font-extrabold text-yeledarkblue"></h3>
+
+      <p data-modal-location class="mt-2 text-sm text-slate-500"></p>
+
+      <div class="my-5 h-px bg-slate-100"></div>
+
+      <p data-modal-description class="text-sm leading-relaxed text-slate-600"></p>
+    </div>
+  </div>
+</dialog>
 
 <script>
+  // Navegación del slider
   document.querySelectorAll("[data-projects-slider]").forEach((slider) => {
     const track = slider.querySelector("[data-projects-track]");
     const leftButton = slider.querySelector('[data-direction="left"]');
@@ -119,4 +162,69 @@ import { ProjectsYele } from "../../data/ProjectsYele/Projects.ts";
       });
     });
   });
+
+  // Ventana ampliada
+  const dialog = document.querySelector<HTMLDialogElement>(
+    "[data-project-dialog]"
+  );
+
+  const modalImage = dialog?.querySelector("[data-modal-image]");
+  const modalType = dialog?.querySelector("[data-modal-type]");
+  const modalTitle = dialog?.querySelector("[data-modal-title]");
+  const modalLocation = dialog?.querySelector("[data-modal-location]");
+  const modalDescription = dialog?.querySelector("[data-modal-description]");
+  const closeButton = dialog?.querySelector("[data-close-dialog]");
+
+  if (
+    dialog &&
+    modalImage &&
+    modalType &&
+    modalTitle &&
+    modalLocation &&
+    modalDescription &&
+    closeButton
+  ) {
+    const openProject = (card: HTMLElement) => {
+      const image = card.querySelector("img");
+
+      if (!image) return;
+
+      const imageClone = image.cloneNode(true) as HTMLImageElement;
+
+      imageClone.className = "h-full w-full object-cover";
+      imageClone.removeAttribute("loading");
+
+      modalImage.replaceChildren(imageClone);
+
+      modalType.textContent = card.dataset.type ?? "";
+      modalTitle.textContent = card.dataset.title ?? "";
+      modalLocation.textContent = card.dataset.location ?? "";
+      modalDescription.textContent = card.dataset.description ?? "";
+
+      dialog.showModal();
+    };
+
+    document.querySelectorAll<HTMLElement>("[data-project-card]").forEach((card) => {
+      card.addEventListener("click", () => openProject(card));
+
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openProject(card);
+        }
+      });
+    });
+
+    // Cerrar con botón
+    closeButton.addEventListener("click", () => {
+      dialog.close();
+    });
+
+    // Cerrar al hacer clic fuera de la tarjeta
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+  }
 </script>
