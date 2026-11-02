@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 export const SLOTS = ['08:00', '12:00', '16:00'] as const;
 export const TIPOS = [
-  'Visita técnica presencial',
-  'Cotización en sitio',
-  'Asesoría virtual',
+  'Visita técnica',
+  'Capacitación',
+  'Visita de evaluación',
 ] as const;
 export const MOTIVOS = [
   'Instalación eléctrica',
