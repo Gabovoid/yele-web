@@ -1,4 +1,11 @@
 ---
+const sessionCookie = Astro.cookies.get('yele_session')?.value;
+let userSession: any = null;
+if (sessionCookie) {
+  try {
+    userSession = JSON.parse(decodeURIComponent(sessionCookie));
+  } catch {}
+}
 /* ─────────────────────────────────────────────
    ICONOS LUCIDE
 ───────────────────────────────────────────── */
@@ -348,6 +355,12 @@ const motivos = [
                     title={f.title}
                     maxlength={f.maxlength}
                     inputmode={f.inputmode}
+                    value={
+                      f.id === 'nombres' ? (userSession?.nombres || '') :
+                      f.id === 'apellidos' ? (userSession?.apellidos || '') :
+                      f.id === 'correo' ? (userSession?.email || '') :
+                      f.id === 'telefono' ? (userSession?.telefono || '') : ''
+                    }
                     class={input}
                   />
 
@@ -585,12 +598,20 @@ const motivos = [
       </div>
 
 
-      <a
-        href="/contact"
-        class="mt-6 inline-flex rounded-lg border-2 border-yeleblue px-6 py-2.5 text-sm font-semibold text-yeleblue transition hover:bg-yeleblue hover:text-white"
-      >
-        Agendar otra visita
-      </a>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <a
+          href="/portal"
+          class="inline-flex items-center gap-2 rounded-lg bg-yeleorange hover:bg-yeledarkorange px-6 py-2.5 text-sm font-bold text-white shadow-sm transition"
+        >
+          Ir a Mi Portal de Trámites
+        </a>
+        <a
+          href="/contact"
+          class="inline-flex rounded-lg border border-slate-300 px-6 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
+        >
+          Agendar otra visita
+        </a>
+      </div>
 
     </div>
 
@@ -740,6 +761,8 @@ const motivos = [
   let selDate: Date | null = null;
 
   let selTime: string | null = null;
+  let occupiedSlots: string[] = [];
+  let loadingSlots = false;
 
 
   // ═════════════════════════════════════════════
@@ -938,111 +961,106 @@ const motivos = [
   // SELECCIONAR FECHA
   // ═════════════════════════════════════════════
 
-  function selectDate(date: Date) {
-
-    selDate =
-      date;
-
-    selTime =
-      null;
+    async function selectDate(date: Date) {
+    selDate = date;
+    selTime = null;
+    occupiedSlots = [];
+    loadingSlots = true;
 
     renderCalendar();
-
     renderSlots();
-
     updateState();
 
+    try {
+      const res = await fetch(`/api/horarios-ocupados?fecha=${iso(date)}`);
+      if (res.ok) {
+        const data = await res.json();
+        occupiedSlots = data.ocupados || [];
+      }
+    } catch (err) {
+      console.error('Error al consultar horarios ocupados:', err);
+    } finally {
+      loadingSlots = false;
+      renderSlots();
+      updateState();
+    }
   }
 
-
-  // ═════════════════════════════════════════════
-  // HORARIOS
-  // ═════════════════════════════════════════════
-
   function renderSlots() {
-
     if (!selDate) {
       return;
     }
 
-    const availableSlots =
-      getAvailableSlots(selDate);
+    const availableSlots = getAvailableSlots(selDate);
 
     slotsEmpty.classList.add('hidden');
-
     noSlots.classList.add('hidden');
-
     slotsGrid.classList.remove('hidden');
-
     slotsGrid.classList.add('grid');
 
-    slotsTitle.textContent =
-      `Horarios para el ${longDate(selDate)}`;
-
+    slotsTitle.textContent = `Horarios para el ${longDate(selDate)}`;
     slotsGrid.innerHTML = '';
 
     if (availableSlots.length === 0) {
-
       slotsGrid.classList.add('hidden');
-
       slotsGrid.classList.remove('grid');
-
+      noSlots.textContent = 'No hay horarios disponibles para este día. Selecciona otra fecha.';
       noSlots.classList.remove('hidden');
-
       selTime = null;
-
       updateState();
-
       return;
     }
 
-    availableSlots.forEach(
-      (time) => {
+    if (loadingSlots) {
+      slotsGrid.innerHTML = `
+        <div class="col-span-full py-4 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
+          <div class="h-3 w-3 animate-spin rounded-full border-2 border-brand-500 border-t-transparent"></div>
+          Verificando horarios disponibles...
+        </div>
+      `;
+      return;
+    }
 
-        const b =
-          document.createElement('button');
+    const freeSlots = availableSlots.filter(t => !occupiedSlots.includes(t));
+    if (freeSlots.length === 0) {
+      slotsGrid.classList.add('hidden');
+      slotsGrid.classList.remove('grid');
+      noSlots.textContent = 'Todos los horarios para esta fecha están ocupados. Por favor selecciona otro día en el calendario.';
+      noSlots.classList.remove('hidden');
+      selTime = null;
+      updateState();
+      return;
+    }
 
-        b.type = 'button';
+    availableSlots.forEach((time) => {
+      const isOccupied = occupiedSlots.includes(time);
+      const b = document.createElement('button');
+      b.type = 'button';
 
+      if (isOccupied) {
+        b.disabled = true;
+        b.title = 'Este horario ya ha sido reservado.';
+        b.className = 'rounded-lg border border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed py-2.5 px-3 text-xs font-semibold flex items-center justify-between opacity-60';
+        b.innerHTML = `<span class="line-through">${time}</span><span class="text-[9px] uppercase tracking-wider font-bold bg-red-100 text-red-600 px-1.5 py-0.5 rounded">Ocupado</span>`;
+      } else {
         b.textContent = time;
-
-        b.setAttribute(
-          'aria-pressed',
-          String(selTime === time)
-        );
-
+        b.setAttribute('aria-pressed', String(selTime === time));
         b.className =
-          'rounded-lg border py-2.5 text-sm font-semibold transition ' +
-          (
-            selTime === time
-              ? 'border-brand-500 bg-brand-500 text-white'
-              : 'border-sky-200 text-navy-800 hover:border-brand-500 hover:text-brand-500'
-          );
+          'rounded-lg border py-2.5 text-sm font-semibold transition cursor-pointer ' +
+          (selTime === time
+            ? 'border-brand-500 bg-brand-500 text-white shadow-sm'
+            : 'border-sky-200 text-navy-800 hover:border-brand-500 hover:text-brand-500 hover:bg-sky-50/50');
 
-        b.addEventListener(
-          'click',
-          () => {
-
-            selTime = time;
-
-            renderSlots();
-
-            updateState();
-
-          }
-        );
-
-        slotsGrid.appendChild(b);
-
+        b.addEventListener('click', () => {
+          selTime = time;
+          renderSlots();
+          updateState();
+        });
       }
-    );
 
+      slotsGrid.appendChild(b);
+    });
   }
-
-
-  // ═════════════════════════════════════════════
-  // ACTUALIZAR ESTADO
-  // ═════════════════════════════════════════════
 
   function updateState() {
 
@@ -1163,12 +1181,16 @@ const motivos = [
       errorBox.classList.add('hidden');
 
       if (!selDate || !selTime) {
-
-        errorBox.textContent =
-          'Selecciona una fecha y una hora antes de continuar.';
-
+        errorBox.textContent = 'Selecciona una fecha y una hora antes de continuar.';
         errorBox.classList.remove('hidden');
+        return;
+      }
 
+      const telVal = (document.getElementById('telefono') as HTMLInputElement)?.value.trim() || '';
+      if (!/^9\d{8}$/.test(telVal)) {
+        errorBox.textContent = 'El teléfono debe ser un celular peruano válido de 9 dígitos y empezar con 9.';
+        errorBox.classList.remove('hidden');
+        (document.getElementById('telefono') as HTMLInputElement)?.focus();
         return;
       }
 

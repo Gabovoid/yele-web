@@ -1,0 +1,549 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Portal del Técnico | YELE S.A.C.">
+  <div class="min-h-screen bg-yelewhiteblue text-slate-700 pb-20">
+    
+    <!-- Topbar Corporativo Técnico (misma paleta Yele) -->
+    <header class="bg-yeledarkblue text-white shadow-md sticky top-0 z-40">
+      <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-yeleorange flex items-center justify-center font-bold text-white shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-base font-bold leading-none tracking-tight text-white">App de Campo — Técnico</h1>
+            <span class="text-xs text-orange-200">YELE S.A.C. Operaciones</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden sm:block">
+            <p id="tech-user-name" class="text-xs font-semibold text-white">Técnico Operativo</p>
+            <span class="text-[10px] text-slate-300">En Servicio</span>
+          </div>
+
+          <button
+            type="button"
+            id="logout-btn"
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer"
+          >
+            Salir
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenedor Principal (Optimizado para Móvil y Desktop) -->
+    <main class="max-w-4xl mx-auto px-4 pt-6 space-y-6">
+
+      <!-- Saludo e Instrucción -->
+      <div class="p-4 sm:p-6 bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-yeledarkblue">Mis Citas Asignadas</h2>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Consulta los datos del cliente, inicia tu visita y redacta el informe para que Gerencia cotice.
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-yelewhiteorange text-yeleorange text-xs font-bold rounded-xl border border-orange-200" id="tech-pending-count">
+            0 Pendientes
+          </span>
+        </div>
+      </div>
+
+      <!-- FILTROS DE CITAS (HOY / TODAS / ATENDIDAS) -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          id="filter-today-btn"
+          class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-yeleorange text-white shadow-xs"
+        >
+          ⚡ Citas de Hoy (<span id="count-today">0</span>)
+        </button>
+
+        <button
+          type="button"
+          id="filter-all-btn"
+          class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-white text-slate-600 hover:text-yeledarkblue border border-slate-200"
+        >
+          📅 Todas las Asignadas (<span id="count-all">0</span>)
+        </button>
+
+        <button
+          type="button"
+          id="filter-done-btn"
+          class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-white text-slate-600 hover:text-yeledarkblue border border-slate-200"
+        >
+          ✓ Historial Atendidas (<span id="count-done">0</span>)
+        </button>
+      </div>
+
+      <!-- Alerta informativa -->
+      <div id="tech-alert" class="hidden p-4 rounded-2xl text-sm font-medium"></div>
+
+      <!-- Lista de Citas Asignadas al Técnico -->
+      <div id="citas-container" class="space-y-4">
+        <div class="p-8 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">
+          <div class="animate-spin inline-block h-6 w-6 border-2 border-yeleblue border-t-transparent rounded-full mb-2"></div>
+          <p class="text-xs">Cargando tus citas asignadas...</p>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- MODAL: REDACTAR INFORME TÉCNICO DE CAMPO -->
+    <div id="informe-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+      <div class="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+        
+        <!-- Cabecera Modal -->
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-yelewhiteblue rounded-t-3xl">
+          <div>
+            <h3 class="text-base font-bold text-yeledarkblue">Generar Informe Técnico de Campo</h3>
+            <p class="text-xs text-slate-500" id="modal-cita-info">Cita #--</p>
+          </div>
+          <button type="button" id="close-modal-btn" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-200/50 transition cursor-pointer">
+            ✕
+          </button>
+        </div>
+
+        <!-- Formulario del Informe -->
+        <form id="informe-form" class="p-5 overflow-y-auto space-y-4 text-xs flex-1">
+          <input type="hidden" id="form-solicitud-id" />
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Diagnóstico Técnico y Hallazgos *</label>
+            <textarea
+              id="form-diagnostico"
+              required
+              rows="3"
+              placeholder="Describe lo observado en sitio: estado del tablero, cableado recalentado, tuberías fisuradas, etc."
+              class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none"
+            ></textarea>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Trabajo y Solución Recomendada *</label>
+            <textarea
+              id="form-trabajo"
+              required
+              rows="2"
+              placeholder="Indica las reparaciones o instalaciones sugeridas para subsanar el problema."
+              class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none"
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Horas Hombre Estimadas *</label>
+              <input
+                type="number"
+                id="form-horas"
+                step="0.5"
+                min="0.5"
+                value="2.0"
+                required
+                class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none font-semibold"
+              />
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Nivel de Criticidad / Urgencia</label>
+              <select
+                id="form-prioridad"
+                class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none bg-white font-medium"
+              >
+                <option value="baja">Baja - Mantenimiento rutinario</option>
+                <option value="media" selected>Media - Requiere atención pronta</option>
+                <option value="alta">Alta - Riesgo operativo</option>
+                <option value="critica">Crítica - Riesgo inminente</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Materiales Requeridos para que Gerencia Cotice -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="font-semibold text-slate-700">Materiales e Insumos Detectados</label>
+              <button
+                type="button"
+                id="add-material-btn"
+                class="text-[11px] font-bold text-yeleorange hover:text-yeledarkorange flex items-center gap-1 cursor-pointer"
+              >
+                + Agregar Ítem
+              </button>
+            </div>
+            <div id="materiales-list" class="space-y-2">
+              <div class="grid grid-cols-12 gap-2 items-center material-row">
+                <input type="text" placeholder="Ej: Llave térmica 32A" class="col-span-7 p-2 rounded-lg border border-slate-200 mat-item" />
+                <input type="number" placeholder="Cant." value="1" class="col-span-2 p-2 rounded-lg border border-slate-200 mat-cant" />
+                <input type="text" placeholder="Und." value="und" class="col-span-3 p-2 rounded-lg border border-slate-200 mat-und" />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Observaciones Internas para Gerencia</label>
+            <textarea
+              id="form-obs"
+              rows="2"
+              placeholder="Notas de acceso, horarios especiales del cliente, condiciones del lugar, etc."
+              class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none"
+            ></textarea>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+            <button
+              type="button"
+              id="cancel-modal-btn"
+              class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition cursor-pointer"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              id="submit-informe-btn"
+              class="px-5 py-2.5 rounded-xl text-white font-bold bg-yeleorange hover:bg-yeledarkorange shadow-md shadow-yeleorange/20 transition cursor-pointer flex items-center gap-2"
+            >
+              <span>Enviar Informe a Gerencia</span>
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    import { supabase, getCurrentProfile } from '../../lib/supabase';
+
+    let currentUserId = '';
+    let allCitas: any[] = [];
+    let currentFilter: 'hoy' | 'todas' | 'done' = 'hoy';
+
+    const hoyLima = () =>
+      new Date(Date.now() - 5 * 3600 * 1000).toISOString().slice(0, 10);
+
+    async function initTecnico() {
+      const profile = await getCurrentProfile();
+      if (!profile || profile.role !== 'tecnico') {
+        alert('Acceso restringido. Esta área es exclusiva para Técnicos de Campo.');
+        window.location.href = '/login';
+        return;
+      }
+
+      currentUserId = profile.id;
+      const userNameEl = document.getElementById('tech-user-name');
+      if (userNameEl) {
+        userNameEl.innerText = `${profile.nombres || 'Técnico'} ${profile.apellidos || ''}`;
+      }
+
+      await loadCitasTecnico();
+    }
+
+    async function loadCitasTecnico() {
+      let citas: any[] = [];
+      try {
+        const res = await fetch('/api/tecnico/mis-citas');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        citas = data.citas || [];
+      } catch (err: any) {
+        const container = document.getElementById('citas-container');
+        if (container) container.innerHTML = `<div class="p-6 bg-white rounded-3xl text-red-500 text-xs">Error al consultar citas: ${err.message}</div>`;
+        return;
+      }
+
+      allCitas = citas;
+
+      // Calcular contadores
+      const today = hoyLima();
+      const todayCount = allCitas.filter(c => c.fecha === today && c.estado !== 'informe_enviado' && c.estado !== 'cotizada' && c.estado !== 'completada').length;
+      const allCount = allCitas.filter(c => c.estado !== 'informe_enviado' && c.estado !== 'cotizada' && c.estado !== 'completada').length;
+      const doneCount = allCitas.filter(c => c.estado === 'informe_enviado' || c.estado === 'cotizada' || c.estado === 'aprobada' || c.estado === 'completada').length;
+
+      document.getElementById('count-today')!.innerText = String(todayCount);
+      document.getElementById('count-all')!.innerText = String(allCount);
+      document.getElementById('count-done')!.innerText = String(doneCount);
+
+      const countEl = document.getElementById('tech-pending-count');
+      if (countEl) countEl.innerText = `${allCount} Pendiente(s)`;
+
+      renderCitas();
+    }
+
+    function renderCitas() {
+      const container = document.getElementById('citas-container');
+      if (!container) return;
+
+      const today = hoyLima();
+      let filtered = allCitas;
+
+      if (currentFilter === 'hoy') {
+        filtered = allCitas.filter(c => c.fecha === today && c.estado !== 'informe_enviado' && c.estado !== 'cotizada' && c.estado !== 'completada');
+      } else if (currentFilter === 'todas') {
+        filtered = allCitas.filter(c => c.estado !== 'informe_enviado' && c.estado !== 'cotizada' && c.estado !== 'completada');
+      } else if (currentFilter === 'done') {
+        filtered = allCitas.filter(c => c.estado === 'informe_enviado' || c.estado === 'cotizada' || c.estado === 'aprobada' || c.estado === 'completada');
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-500 space-y-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/>
+            </svg>
+            <h3 class="font-bold text-slate-700">No hay citas en esta vista</h3>
+            <p class="text-xs">
+              ${currentFilter === 'hoy' ? 'No tienes visitas programadas para hoy. Revisa "Todas las Asignadas".' : 'Sin registros en esta categoría.'}
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(c => {
+        const isToday = c.fecha === today;
+
+        return `
+          <div class="bg-white p-5 sm:p-6 rounded-3xl border ${isToday ? 'border-orange-300 ring-2 ring-orange-200/50' : 'border-slate-200'} shadow-sm space-y-4 hover:border-yeleblue/30 transition">
+            
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-yelewhiteblue text-yeleblue border border-blue-100">
+                    Cita #${c.id} • ${c.tipo}
+                  </span>
+                  ${isToday ? `
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white animate-pulse">
+                      🔥 CITA PARA HOY
+                    </span>
+                  ` : ''}
+                </div>
+                <h3 class="text-base font-bold text-yeledarkblue">${c.nombres} ${c.apellidos}</h3>
+                <p class="text-xs text-slate-500 font-medium">Motivo: ${c.motivo}</p>
+              </div>
+
+              <div class="text-right">
+                <div class="text-xs font-bold text-yeledarkblue">${c.fecha}</div>
+                <div class="text-xs text-yeleorange font-extrabold text-sm">${c.hora}</div>
+              </div>
+            </div>
+
+            <!-- Datos de Ubicación y Contacto con Acciones Rápidas -->
+            <div class="p-3 bg-slate-50 rounded-2xl grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yeleorange shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span class="text-slate-700 truncate" title="${c.direccion}">${c.direccion}</span>
+                <a 
+                  href="https://maps.google.com/?q=${encodeURIComponent(c.direccion)}" 
+                  target="_blank" 
+                  class="ml-auto text-[11px] font-bold text-yeleblue hover:underline"
+                >
+                  Mapa Waze/Maps
+                </a>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span class="text-slate-700">${c.telefono}</span>
+                <a href="tel:${c.telefono}" class="ml-auto text-[11px] font-bold text-emerald-600 hover:underline">
+                  Llamar
+                </a>
+              </div>
+            </div>
+
+            <!-- Detalles del Cliente -->
+            <p class="text-xs text-slate-600 italic bg-amber-50/50 p-2.5 rounded-xl border border-amber-100">
+              "${c.detalles}"
+            </p>
+
+            <!-- Acciones Operativas -->
+            <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100">
+              <span class="text-xs font-semibold ${c.estado === 'informe_enviado' ? 'text-emerald-600' : 'text-slate-500'}">
+                Estado: <span class="capitalize font-bold">${c.estado.replace('_', ' ')}</span>
+              </span>
+
+              <div class="flex items-center gap-2">
+                ${c.estado === 'asignada' ? `
+                  <button 
+                    type="button"
+                    class="btn-iniciar-visita px-3.5 py-2 rounded-xl text-xs font-semibold bg-yelewhiteblue text-yeleblue hover:bg-blue-50 border border-blue-200 transition cursor-pointer"
+                    data-id="${c.id}"
+                  >
+                    Marcar: En Sitio
+                  </button>
+                ` : ''}
+
+                ${c.estado !== 'informe_enviado' && c.estado !== 'cotizada' && c.estado !== 'aprobada' && c.estado !== 'completada' ? `
+                  <button 
+                    type="button"
+                    class="btn-abrir-informe px-4 py-2 rounded-xl text-xs font-bold text-white bg-yeleorange hover:bg-yeledarkorange shadow-sm transition cursor-pointer"
+                    data-id="${c.id}"
+                    data-title="${c.nombres} ${c.apellidos} - Cita #${c.id}"
+                  >
+                    Redactar Informe
+                  </button>
+                ` : `
+                  <span class="text-xs text-emerald-600 font-bold flex items-center gap-1">
+                    ✓ Informe Remitido a Gerencia
+                  </span>
+                `}
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      // Listeners
+      document.querySelectorAll('.btn-iniciar-visita').forEach(btn => {
+        btn.addEventListener('click', async (e: any) => {
+          const id = e.target.getAttribute('data-id');
+          try {
+            const res = await fetch('/api/tecnico/mis-citas', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ solicitud_id: parseInt(id, 10), estado: 'en_sitio' }),
+            });
+            const d = await res.json();
+            if (!res.ok) throw new Error(d.error);
+            await loadCitasTecnico();
+          } catch (err: any) {
+            alert('Error al actualizar estado: ' + err.message);
+          }
+        });
+      });
+
+      document.querySelectorAll('.btn-abrir-informe').forEach(btn => {
+        btn.addEventListener('click', (e: any) => {
+          const id = e.target.getAttribute('data-id');
+          const title = e.target.getAttribute('data-title');
+          openInformeModal(id, title);
+        });
+      });
+    }
+
+    // Modal Logic
+    const modal = document.getElementById('informe-modal');
+    const form = document.getElementById('informe-form') as HTMLFormElement;
+
+    function openInformeModal(solicitudId: string, title: string) {
+      (document.getElementById('form-solicitud-id') as HTMLInputElement).value = solicitudId;
+      document.getElementById('modal-cita-info')!.innerText = title;
+      modal?.classList.remove('hidden');
+    }
+
+    function closeInformeModal() {
+      modal?.classList.add('hidden');
+      form?.reset();
+    }
+
+    document.getElementById('close-modal-btn')?.addEventListener('click', closeInformeModal);
+    document.getElementById('cancel-modal-btn')?.addEventListener('click', closeInformeModal);
+
+    // Agregar Material
+    document.getElementById('add-material-btn')?.addEventListener('click', () => {
+      const container = document.getElementById('materiales-list');
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-12 gap-2 items-center material-row';
+      row.innerHTML = `
+        <input type="text" placeholder="Nombre de material" class="col-span-7 p-2 rounded-lg border border-slate-200 mat-item" />
+        <input type="number" placeholder="Cant." value="1" class="col-span-2 p-2 rounded-lg border border-slate-200 mat-cant" />
+        <input type="text" placeholder="Und." value="und" class="col-span-3 p-2 rounded-lg border border-slate-200 mat-und" />
+      `;
+      container?.appendChild(row);
+    });
+
+    // Enviar Informe
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submit-informe-btn') as HTMLButtonElement;
+      
+      const solicitudId = (document.getElementById('form-solicitud-id') as HTMLInputElement).value;
+      const diagnostico = (document.getElementById('form-diagnostico') as HTMLTextAreaElement).value.trim();
+      const trabajo = (document.getElementById('form-trabajo') as HTMLTextAreaElement).value.trim();
+      const horas = parseFloat((document.getElementById('form-horas') as HTMLInputElement).value) || 1;
+      const prioridad = (document.getElementById('form-prioridad') as HTMLSelectElement).value;
+      const obs = (document.getElementById('form-obs') as HTMLTextAreaElement).value.trim();
+
+      // Recolectar materiales
+      const rows = document.querySelectorAll('.material-row');
+      const materiales: any[] = [];
+      rows.forEach(r => {
+        const item = (r.querySelector('.mat-item') as HTMLInputElement)?.value.trim();
+        const cant = parseFloat((r.querySelector('.mat-cant') as HTMLInputElement)?.value) || 1;
+        const und = (r.querySelector('.mat-und') as HTMLInputElement)?.value.trim() || 'und';
+        if (item) materiales.push({ item, cantidad: cant, unidad: und });
+      });
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-70');
+
+        const res = await fetch('/api/tecnico/mis-citas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            solicitud_id: parseInt(solicitudId, 10),
+            diagnostico,
+            trabajo_realizado: trabajo,
+            horas_hombre_estimadas: horas,
+            nivel_prioridad: prioridad,
+            materiales_sugeridos: materiales,
+            recomendaciones: obs,
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        alert('¡Informe remitido a Gerencia con éxito! Se ha notificado para su evaluación y cotización.');
+        closeInformeModal();
+        await loadCitasTecnico();
+      } catch (err: any) {
+        alert('Error al enviar informe: ' + (err.message || 'Intente nuevamente'));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-70');
+      }
+    });
+
+    // Filtros de Citas
+    const filterTodayBtn = document.getElementById('filter-today-btn');
+    const filterAllBtn = document.getElementById('filter-all-btn');
+    const filterDoneBtn = document.getElementById('filter-done-btn');
+
+    function setFilter(f: 'hoy' | 'todas' | 'done') {
+      currentFilter = f;
+
+      const activeCls = 'px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-yeleorange text-white shadow-xs';
+      const inactiveCls = 'px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer bg-white text-slate-600 hover:text-yeledarkblue border border-slate-200';
+
+      filterTodayBtn!.className = f === 'hoy' ? activeCls : inactiveCls;
+      filterAllBtn!.className = f === 'todas' ? activeCls : inactiveCls;
+      filterDoneBtn!.className = f === 'done' ? activeCls : inactiveCls;
+
+      renderCitas();
+    }
+
+    filterTodayBtn?.addEventListener('click', () => setFilter('hoy'));
+    filterAllBtn?.addEventListener('click', () => setFilter('todas'));
+    filterDoneBtn?.addEventListener('click', () => setFilter('done'));
+
+    // Salir
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = '/api/auth/logout';
+    });
+
+    initTecnico();
+  </script>
+</Layout>

@@ -1,0 +1,466 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Iniciar Sesión | YELE S.A.C.">
+  <div class="min-h-[85vh] bg-yelewhiteblue py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div class="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 transition-all">
+      
+      <!-- Encabezado con Identidad de Marca -->
+      <div class="text-center">
+        <div class="inline-flex items-center justify-center p-3 bg-yelewhiteorange rounded-2xl mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yeleorange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-yeledarkblue tracking-tight">
+          Portal de Servicios
+        </h2>
+        <p class="mt-2 text-sm text-slate-500">
+          Accede según tu tipo de cuenta en YELE S.A.C.
+        </p>
+      </div>
+
+      <!-- Selector de Pestañas (Roles) -->
+      <div class="flex p-1.5 space-x-1 bg-slate-100 rounded-xl">
+        <button
+          type="button"
+          id="tab-client-btn"
+          class="flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all shadow-sm bg-white text-yeledarkblue flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yeleorange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          Clientes
+        </button>
+
+        <button
+          type="button"
+          id="tab-worker-btn"
+          class="flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:text-yeledarkblue flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          Personal Empresa
+        </button>
+      </div>
+
+      <!-- Alerta de Mensajes / Errores -->
+      <div id="alert-box" class="hidden p-4 rounded-xl text-xs sm:text-sm font-medium transition-all" role="alert"></div>
+
+      <!-- ========================================== -->
+      <!-- PESTAÑA 1: ACCESO CLIENTES                 -->
+      <!-- ========================================== -->
+      <div id="section-client" class="space-y-5">
+        
+        <!-- Botón Social Google -->
+        <div>
+          <button
+            type="button"
+            id="google-login-btn"
+            class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-slate-200 rounded-xl shadow-sm text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 transition cursor-pointer"
+          >
+            <svg class="h-5 w-5" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            Continuar con Google
+          </button>
+        </div>
+
+        <div class="relative flex items-center justify-center">
+          <div class="border-t border-slate-200 w-full"></div>
+          <span class="bg-white px-3 text-xs uppercase tracking-wider text-slate-400 font-semibold absolute" id="divider-text">
+            O con correo electrónico
+          </span>
+        </div>
+
+        <!-- Formulario Correo Cliente (Login / Registro) -->
+        <form id="client-form" class="space-y-4">
+          
+          <!-- Modo Visualizador: Título -->
+          <div class="flex items-center justify-between pb-1">
+            <span id="form-mode-title" class="text-xs font-bold text-yeledarkblue uppercase tracking-wide">
+              Iniciar Sesión
+            </span>
+            <span class="text-[11px] text-slate-400">Acceso Cliente</span>
+          </div>
+
+          <!-- Campos adicionales para registro de cliente -->
+          <div id="register-extra-fields" class="hidden space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="client-name" class="block text-xs font-semibold text-slate-700 mb-1">Nombres *</label>
+                <input
+                  type="text"
+                  id="client-name"
+                  placeholder="Ej. Juan"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-yeleblue focus:border-yeleblue"
+                />
+              </div>
+              <div>
+                <label for="client-lastname" class="block text-xs font-semibold text-slate-700 mb-1">Apellidos *</label>
+                <input
+                  type="text"
+                  id="client-lastname"
+                  placeholder="Ej. Pérez"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-yeleblue focus:border-yeleblue"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="client-phone" class="block text-xs font-semibold text-slate-700 mb-1">Teléfono Móvil *</label>
+              <input
+                type="tel"
+                id="client-phone"
+                placeholder="987654321"
+                pattern="9[0-9]{8}"
+                maxlength="9"
+                inputmode="numeric"
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-yeleblue focus:border-yeleblue"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="client-email" class="block text-xs font-semibold text-slate-700 mb-1">Correo Electrónico *</label>
+            <input
+              type="email"
+              id="client-email"
+              required
+              placeholder="cliente@ejemplo.com"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-yeleblue focus:border-yeleblue"
+            />
+          </div>
+
+          <div>
+            <label for="client-password" class="block text-xs font-semibold text-slate-700 mb-1">Contraseña *</label>
+            <input
+              type="password"
+              id="client-password"
+              required
+              placeholder="Mínimo 6 caracteres"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-yeleblue focus:border-yeleblue"
+            />
+          </div>
+
+          <button
+            type="submit"
+            id="client-submit-btn"
+            class="w-full py-3 px-4 rounded-xl font-semibold text-white bg-yeleblue hover:bg-yeledarkblue shadow-md shadow-yeleblue/20 transition cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span id="client-btn-text">Iniciar Sesión</span>
+          </button>
+        </form>
+
+        <div class="text-center pt-2">
+          <button
+            type="button"
+            id="toggle-client-mode-btn"
+            class="text-xs font-semibold text-yeleorange hover:text-yeledarkorange transition cursor-pointer"
+          >
+            ¿No tienes cuenta? Regístrate aquí
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- PESTAÑA 2: ACCESO PERSONAL EMPRESA         -->
+      <!-- ========================================== -->
+      <div id="section-worker" class="hidden space-y-5">
+        
+        <!-- Notificación de Seguridad Corporativa -->
+        <div class="p-3.5 bg-yelewhiteblue rounded-2xl border border-slate-200 flex items-start gap-3">
+          <div class="p-1.5 bg-yeleblue text-white rounded-lg mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-yeledarkblue uppercase tracking-wider">Acceso Corporativo Exclusivo</h4>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Por protocolo de seguridad, el personal técnico y gerencial solo puede autenticarse mediante sus credenciales autorizadas (sin Google).
+            </p>
+          </div>
+        </div>
+
+        <form id="worker-form" class="space-y-4">
+          <div>
+            <label for="worker-email" class="block text-xs font-semibold text-slate-700 mb-1">Correo Corporativo</label>
+            <input
+              type="email"
+              id="worker-email"
+              required
+              placeholder="nombre@yele.com"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-yeledarkblue focus:border-yeledarkblue"
+            />
+          </div>
+
+          <div>
+            <label for="worker-password" class="block text-xs font-semibold text-slate-700 mb-1">Contraseña de Empleado</label>
+            <input
+              type="password"
+              id="worker-password"
+              required
+              placeholder="••••••••"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-yeledarkblue focus:border-yeledarkblue"
+            />
+          </div>
+
+          <button
+            type="submit"
+            id="worker-submit-btn"
+            class="w-full py-3 px-4 rounded-xl font-semibold text-white bg-yeledarkblue hover:bg-slate-900 shadow-md shadow-yeledarkblue/20 transition cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span>Ingresar al Sistema de Operaciones</span>
+          </button>
+        </form>
+
+        <!-- Leyenda de roles autorizados -->
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <span class="h-2 w-2 rounded-full bg-yeleorange"></span>
+            Gerencia (Admin)
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="h-2 w-2 rounded-full bg-yeleblue"></span>
+            Técnico Operativo
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    import { 
+      loginWithGoogle, 
+      registerCliente, 
+      loginCliente, 
+      loginTrabajador,
+      isSupabaseConfigured 
+    } from '../lib/supabase';
+
+    // Elementos del DOM
+    const tabClientBtn = document.getElementById('tab-client-btn') as HTMLButtonElement;
+    const tabWorkerBtn = document.getElementById('tab-worker-btn') as HTMLButtonElement;
+    const sectionClient = document.getElementById('section-client') as HTMLDivElement;
+    const sectionWorker = document.getElementById('section-worker') as HTMLDivElement;
+    const alertBox = document.getElementById('alert-box') as HTMLDivElement;
+
+    // Elementos Cliente
+    const googleLoginBtn = document.getElementById('google-login-btn') as HTMLButtonElement;
+    const clientForm = document.getElementById('client-form') as HTMLFormElement;
+    const toggleClientModeBtn = document.getElementById('toggle-client-mode-btn') as HTMLButtonElement;
+    const registerExtraFields = document.getElementById('register-extra-fields') as HTMLDivElement;
+    const clientSubmitBtn = document.getElementById('client-submit-btn') as HTMLButtonElement;
+    const clientBtnText = document.getElementById('client-btn-text') as HTMLSpanElement;
+    const formModeTitle = document.getElementById('form-mode-title') as HTMLSpanElement;
+
+    // Elementos Trabajador
+    const workerForm = document.getElementById('worker-form') as HTMLFormElement;
+    const workerSubmitBtn = document.getElementById('worker-submit-btn') as HTMLButtonElement;
+
+    let isClientRegister = false;
+
+    // Utilidad para mostrar alertas
+    function showAlert(message: string, type: 'error' | 'success' | 'info') {
+      if (!alertBox) return;
+      alertBox.innerText = message;
+      alertBox.classList.remove(
+        'hidden', 
+        'bg-red-50', 'text-red-700', 'border-red-200', 
+        'bg-emerald-50', 'text-emerald-700', 'border-emerald-200',
+        'bg-amber-50', 'text-amber-800', 'border-amber-200'
+      );
+      alertBox.classList.add('border');
+
+      if (type === 'error') {
+        alertBox.classList.add('bg-red-50', 'text-red-700', 'border-red-200');
+      } else if (type === 'success') {
+        alertBox.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+      } else {
+        alertBox.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+      }
+    }
+
+    function clearAlert() {
+      if (!alertBox) return;
+      alertBox.classList.add('hidden');
+    }
+
+    // Cambio de Pestañas
+    tabClientBtn?.addEventListener('click', () => {
+      clearAlert();
+      tabClientBtn.className = 'flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all shadow-sm bg-white text-yeledarkblue flex items-center justify-center gap-2 cursor-pointer';
+      tabWorkerBtn.className = 'flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:text-yeledarkblue flex items-center justify-center gap-2 cursor-pointer';
+      sectionClient.classList.remove('hidden');
+      sectionWorker.classList.add('hidden');
+    });
+
+    tabWorkerBtn?.addEventListener('click', () => {
+      clearAlert();
+      tabWorkerBtn.className = 'flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all shadow-sm bg-white text-yeledarkblue flex items-center justify-center gap-2 cursor-pointer';
+      tabClientBtn.className = 'flex-1 py-2.5 px-3 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:text-yeledarkblue flex items-center justify-center gap-2 cursor-pointer';
+      sectionWorker.classList.remove('hidden');
+      sectionClient.classList.add('hidden');
+    });
+
+    // Alternar entre Iniciar Sesión y Registrarse
+    function setFormMode(register: boolean) {
+      isClientRegister = register;
+      if (isClientRegister) {
+        registerExtraFields.classList.remove('hidden');
+        if (clientBtnText) clientBtnText.innerText = 'Crear Cuenta de Cliente';
+        if (formModeTitle) formModeTitle.innerText = 'Registro de Nuevo Cliente';
+        toggleClientModeBtn.innerText = '¿Ya tienes una cuenta? Inicia sesión aquí';
+      } else {
+        registerExtraFields.classList.add('hidden');
+        if (clientBtnText) clientBtnText.innerText = 'Iniciar Sesión';
+        if (formModeTitle) formModeTitle.innerText = 'Iniciar Sesión';
+        toggleClientModeBtn.innerText = '¿No tienes cuenta? Regístrate aquí';
+      }
+    }
+
+    toggleClientModeBtn?.addEventListener('click', () => {
+      clearAlert();
+      setFormMode(!isClientRegister);
+    });
+
+    // Login con Google
+    googleLoginBtn?.addEventListener('click', async () => {
+      try {
+        clearAlert();
+        if (!isSupabaseConfigured) {
+          showAlert(
+            'Para habilitar Google OAuth, agrega PUBLIC_SUPABASE_ANON_KEY en tu archivo .env.',
+            'info'
+          );
+          return;
+        }
+
+        googleLoginBtn.disabled = true;
+        googleLoginBtn.classList.add('opacity-70');
+        await loginWithGoogle();
+      } catch (err: any) {
+        showAlert('Error con Google: ' + (err.message || 'Intente nuevamente'), 'error');
+        googleLoginBtn.disabled = false;
+        googleLoginBtn.classList.remove('opacity-70');
+      }
+    });
+
+    // Formulario de Clientes: Login o Registro
+    clientForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert();
+
+      const emailInput = document.getElementById('client-email') as HTMLInputElement;
+      const passInput = document.getElementById('client-password') as HTMLInputElement;
+
+      const email = emailInput.value.trim();
+      const pass = passInput.value;
+
+      if (!email || !pass) {
+        showAlert('Por favor completa tu correo y contraseña.', 'error');
+        return;
+      }
+
+      try {
+        clientSubmitBtn.disabled = true;
+        clientSubmitBtn.classList.add('opacity-70');
+
+        if (isClientRegister) {
+          const nombres = (document.getElementById('client-name') as HTMLInputElement)?.value.trim();
+          const apellidos = (document.getElementById('client-lastname') as HTMLInputElement)?.value.trim();
+          const telefono = (document.getElementById('client-phone') as HTMLInputElement)?.value.trim();
+
+          if (!nombres || !apellidos || !telefono) {
+            showAlert('Por favor ingresa tus nombres, apellidos y teléfono.', 'error');
+            return;
+          }
+
+          if (!/^9\d{8}$/.test(telefono)) {
+            showAlert('El celular debe tener 9 dígitos y empezar con 9 (versión Perú).', 'error');
+            return;
+          }
+
+          if (pass.length < 6) {
+            showAlert('La contraseña debe tener al menos 6 caracteres.', 'error');
+            return;
+          }
+
+          const res = await registerCliente({
+            email,
+            password: pass,
+            nombres,
+            apellidos,
+            telefono,
+          });
+
+          showAlert(
+            res.message || '¡Cuenta creada con éxito! Iniciando sesión...',
+            'success'
+          );
+
+          // Iniciar sesión automáticamente
+          setTimeout(async () => {
+            try {
+              const loginRes = await loginCliente(email, pass);
+              window.location.href = loginRes.redirectUrl || '/contact?login=success';
+            } catch {
+              setFormMode(false);
+            }
+          }, 1200);
+
+        } else {
+          const res = await loginCliente(email, pass);
+          showAlert('¡Bienvenido! Redirigiendo...', 'success');
+          setTimeout(() => {
+            window.location.href = res.redirectUrl || '/contact?login=success';
+          }, 800);
+        }
+      } catch (err: any) {
+        showAlert(err.message || 'Error al procesar la solicitud', 'error');
+      } finally {
+        clientSubmitBtn.disabled = false;
+        clientSubmitBtn.classList.remove('opacity-70');
+      }
+    });
+
+    // Login Exclusivo para Trabajadores (Admin / Técnicos)
+    workerForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAlert();
+
+      const email = (document.getElementById('worker-email') as HTMLInputElement).value.trim();
+      const pass = (document.getElementById('worker-password') as HTMLInputElement).value;
+
+      if (!email || !pass) {
+        showAlert('Ingresa tu correo corporativo y contraseña.', 'error');
+        return;
+      }
+
+      try {
+        workerSubmitBtn.disabled = true;
+        workerSubmitBtn.classList.add('opacity-70');
+
+        const result = await loginTrabajador(email, pass);
+        showAlert(`Bienvenido/a ${result.user?.nombres || ''}. Redirigiendo...`, 'success');
+
+        setTimeout(() => {
+          window.location.href = result.redirectUrl || '/admin';
+        }, 800);
+      } catch (err: any) {
+        showAlert(err.message || 'Error al autenticar credenciales de empresa.', 'error');
+      } finally {
+        workerSubmitBtn.disabled = false;
+        workerSubmitBtn.classList.remove('opacity-70');
+      }
+    });
+  </script>
+</Layout>

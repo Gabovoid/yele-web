@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Autenticando | YELE S.A.C.">
+  <div class="min-h-[70vh] flex flex-col items-center justify-center px-4 bg-yelewhiteblue">
+    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-center max-w-md w-full">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-yeleblue border-t-yeleorange mb-4"></div>
+      <h2 class="text-xl font-bold text-yeledarkblue mb-2">Comprobando credenciales...</h2>
+      <p class="text-slate-500 text-sm" id="status-text">Conectando con el servicio de autenticación...</p>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../../lib/supabase';
+
+    async function handleAuth() {
+      const statusText = document.getElementById('status-text');
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+
+        if (!session?.user) {
+          // Si Supabase aún está parseando el hash en la URL
+          const { data: authListener } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+            if (currentSession?.user) {
+              await processUser(currentSession.user.id);
+            }
+          });
+          return;
+        }
+
+        await processUser(session.user.id);
+      } catch (err: any) {
+        if (statusText) {
+          statusText.innerText = 'Error de autenticación: ' + (err.message || 'Intente nuevamente');
+          statusText.classList.add('text-red-500');
+        }
+        setTimeout(() => {
+          window.location.href = '/login?error=auth_failed';
+        }, 2500);
+      }
+    }
+
+    async function processUser(userId: string) {
+      const statusText = document.getElementById('status-text');
+      if (statusText) statusText.innerText = 'Redirigiendo a tu espacio de trabajo...';
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+
+      if (profile?.role === 'admin') {
+        window.location.href = '/admin';
+      } else if (profile?.role === 'tecnico') {
+        window.location.href = '/tecnico';
+      } else {
+        window.location.href = '/contact?auth=success';
+      }
+    }
+
+    handleAuth();
+  </script>
+</Layout>

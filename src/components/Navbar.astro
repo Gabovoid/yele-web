@@ -7,12 +7,30 @@ const links = [
   { label: "Nosotros", href: "/nosotros" },
   { label: "Proyectos", href: "/proyectos" },
 ];
+
+// Obtener usuario del servidor si existe sesión activa
+let serverUser: any = null;
+const sessionCookie = Astro.cookies.get('yele_session')?.value;
+if (sessionCookie) {
+  try {
+    serverUser = JSON.parse(decodeURIComponent(sessionCookie));
+  } catch (e) {
+    serverUser = null;
+  }
+}
+
+const displayName = serverUser?.nombres?.split(' ')[0] || serverUser?.email?.split('@')[0] || '';
+const initial = displayName ? displayName.charAt(0).toUpperCase() : 'U';
+
+const currentPath = Astro.url.pathname;
+const isWorkerRoute = currentPath.startsWith('/admin') || currentPath.startsWith('/tecnico');
+const isWorker = isWorkerRoute || serverUser?.role === 'admin' || serverUser?.role === 'tecnico';
 ---
 
 <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100">
   <div class="mx-auto flex h-19 max-w-6xl items-center justify-between px-6">
     <!--logo-->
-     <a href="/" class="flex items-center gap-2.5">
+    <a href="/" class="flex items-center gap-2.5">
       <Image
         src={logo}
         alt="Logo"
@@ -20,8 +38,12 @@ const links = [
         format="webp"
       />
     </a>
-    <!--nav-->
-    <nav class="hidden md:flex items-center gap-10 text-[16px] font-semibold text-yeledarkblue">
+
+    <!--nav (Oculto en Gerencia y Técnico)-->
+    <nav id="nav-main-links" class:list={[
+      "hidden md:flex items-center gap-10 text-[16px] font-semibold text-yeledarkblue",
+      isWorker ? "!hidden" : ""
+    ]}>
       {
         links.map((l, i) => (
           <a
@@ -37,10 +59,155 @@ const links = [
       }
     </nav>
 
-    <!--contactar-->
-    <a href="/contact" class="hidden md:inline-flex cursor-pointer items-center gap-2 rounded-lg bg-yeleblue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-yeledarkblue">
+    <!--zona de usuario / contacto-->
+    <div class="flex items-center gap-3">
+      
+      <!-- Usuario Logueado (Servidor / Cliente) -->
+      <div 
+        id="nav-user-badge" 
+        class:list={[
+          "items-center gap-2.5 px-3 py-1.5 rounded-xl bg-yelewhiteorange border border-orange-200 transition-all",
+          serverUser ? "flex" : "hidden"
+        ]}
+      >
+        <div class="h-8 w-8 rounded-full bg-yeleorange text-white flex items-center justify-center font-bold text-xs uppercase shadow-xs shrink-0">
+          <span id="nav-user-initial">{initial}</span>
+        </div>
+
+        <div class="text-left text-xs leading-tight">
+          <span class="block text-[10px] text-slate-400 font-medium">Conectado</span>
+          <span class="font-bold text-yeledarkblue truncate max-w-[130px] inline-block" id="nav-user-name">
+            {displayName ? `Hola, ${displayName}` : 'Mi Cuenta'}
+          </span>
+        </div>
+
+        {/* Acceso a panel según rol */}
+        <a
+          id="nav-panel-link"
+          href={serverUser?.role === 'admin' ? '/admin' : serverUser?.role === 'tecnico' ? '/tecnico' : '/portal'}
+          class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-yeleblue text-white hover:bg-yeledarkblue transition inline-block"
+          title="Ir a mi panel de control o trámites"
+        >
+          <span id="nav-panel-label">{serverUser?.role === 'admin' ? 'Panel Gerencia' : serverUser?.role === 'tecnico' ? 'Panel Técnico' : 'Mis Trámites'}</span>
+        </a>
+
+        {/* Botón Cerrar Sesión */}
+        <button
+          type="button"
+          id="nav-logout-btn"
+          class="p-1 text-slate-400 hover:text-red-500 rounded-lg transition cursor-pointer"
+          title="Cerrar Sesión"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Botón Ingresar si NO está autenticado -->
+      <a 
+        id="nav-login-btn" 
+        href="/login" 
+        class:list={[
+          "hidden md:inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-yeledarkblue transition hover:bg-slate-50 hover:border-yeleblue",
+          serverUser ? "!hidden" : ""
+        ]}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yeleorange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        Portal / Ingresar
+      </a>
+
+      <!-- Botón Solicitar Cotización (Solo para clientes o visitantes) -->
+      <a 
+        id="nav-cotizar-btn"
+        href="/contact" 
+        class:list={[
+          "hidden md:inline-flex cursor-pointer items-center gap-2 rounded-lg bg-yeleblue px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-yeledarkblue",
+          serverUser?.role === 'admin' || serverUser?.role === 'tecnico' ? "!hidden" : ""
+        ]}
+      >
         Solicitar Cotización
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right preview-icon"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-    </a>
- </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right preview-icon"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+
+    </div>
+  </div>
 </header>
+
+<script>
+  import { getActiveSessionUser, logoutUser } from '../lib/supabase';
+
+  async function updateNavbarUser() {
+    const user = await getActiveSessionUser();
+    const userBadge = document.getElementById('nav-user-badge');
+    const loginBtn = document.getElementById('nav-login-btn');
+    const userNameEl = document.getElementById('nav-user-name');
+    const userInitialEl = document.getElementById('nav-user-initial');
+    const panelLink = document.getElementById('nav-panel-link') as HTMLAnchorElement;
+    const panelLabel = document.getElementById('nav-panel-label');
+    const cotizarBtn = document.getElementById('nav-cotizar-btn');
+    const navMainLinks = document.getElementById('nav-main-links');
+
+    const isWorkerPath = window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/tecnico');
+    const isWorkerSession = !!(user && (user.role === 'admin' || user.role === 'tecnico'));
+
+    if (isWorkerPath || isWorkerSession) {
+      if (navMainLinks) navMainLinks.classList.add('!hidden');
+    } else {
+      if (navMainLinks) navMainLinks.classList.remove('!hidden');
+    }
+
+    if (user) {
+      const displayName = user.nombres?.split(' ')[0] || user.email?.split('@')[0] || 'Usuario';
+      if (userNameEl) userNameEl.innerText = `Hola, ${displayName}`;
+      if (userInitialEl) userInitialEl.innerText = displayName.charAt(0).toUpperCase();
+
+      if (userBadge) userBadge.classList.remove('hidden');
+      if (userBadge) userBadge.classList.add('flex');
+      if (loginBtn) loginBtn.classList.add('!hidden');
+
+      // Ocultar botón "Solicitar Cotización" para Gerencia y Técnicos
+      if (cotizarBtn) {
+        if (user.role === 'admin' || user.role === 'tecnico') {
+          cotizarBtn.classList.add('!hidden');
+        } else {
+          cotizarBtn.classList.remove('!hidden');
+        }
+      }
+
+      if (panelLink && panelLabel) {
+        if (user.role === 'admin') {
+          panelLink.href = '/admin';
+          panelLabel.innerText = 'Panel Gerencia';
+          panelLink.classList.remove('hidden');
+          panelLink.classList.add('inline-block');
+        } else if (user.role === 'tecnico') {
+          panelLink.href = '/tecnico';
+          panelLabel.innerText = 'Panel Técnico';
+          panelLink.classList.remove('hidden');
+          panelLink.classList.add('inline-block');
+        } else {
+          panelLink.href = '/portal';
+          panelLabel.innerText = 'Mis Trámites';
+          panelLink.classList.remove('hidden');
+          panelLink.classList.add('inline-block');
+        }
+      }
+    } else {
+      if (userBadge) userBadge.classList.add('hidden');
+      if (userBadge) userBadge.classList.remove('flex');
+      if (loginBtn) loginBtn.classList.remove('!hidden');
+      if (cotizarBtn) cotizarBtn.classList.remove('!hidden');
+    }
+  }
+
+  // Listener para cerrar sesión
+  document.getElementById('nav-logout-btn')?.addEventListener('click', async () => {
+    await logoutUser();
+  });
+
+  // Ejecutar al cargar la página
+  updateNavbarUser();
+</script>

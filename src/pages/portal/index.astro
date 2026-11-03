@@ -1,0 +1,602 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Bandeja de Trámites y Servicios | YELE S.A.C.">
+  <div class="min-h-screen bg-yelewhiteblue text-slate-700 pb-20">
+    
+    <!-- Topbar del Portal Cliente -->
+    <header class="bg-yeledarkblue text-white shadow-md sticky top-0 z-40">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <a href="/" class="h-9 w-9 rounded-xl bg-yeleorange flex items-center justify-center font-bold text-white shadow-sm hover:opacity-90 transition">
+            Y
+          </a>
+          <div>
+            <h1 class="text-base font-bold leading-none tracking-tight text-white">Mi Portal de Trámites</h1>
+            <span class="text-xs text-orange-200">Seguimiento, Notificaciones y Cotizaciones</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="text-right hidden sm:block">
+            <p id="portal-user-name" class="text-xs font-semibold text-white">Cargando perfil...</p>
+            <span class="inline-block px-2 py-0.5 text-[10px] bg-yelelightblue text-white rounded-full font-medium">
+              Cliente Titular
+            </span>
+          </div>
+
+          <a
+            href="/contact"
+            class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-yeleorange hover:bg-yeledarkorange text-white shadow-sm transition flex items-center gap-1.5 cursor-pointer"
+          >
+            + Nueva Cita
+          </a>
+
+          <button
+            type="button"
+            id="portal-logout-btn"
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer"
+          >
+            Salir
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+      <!-- Pestañas de Navegación del Portal -->
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            id="tab-tramites-btn"
+            class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-yeledarkblue text-white shadow-sm transition flex items-center gap-2 cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yeleorange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Mis Solicitudes (<span id="count-tramites">0</span>)
+          </button>
+
+          <button
+            type="button"
+            id="tab-notif-btn"
+            class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-600 hover:text-yeledarkblue border border-slate-200 transition flex items-center gap-2 cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yeleblue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
+            Notificaciones (<span id="count-notif">0</span>)
+          </button>
+        </div>
+
+        <span class="text-xs text-slate-500 hidden sm:inline-block">
+          Actualizado en tiempo real desde Supabase
+        </span>
+      </div>
+
+      <!-- SECCIÓN 1: LISTADO DE TRÁMITES Y ESTADO PASO A PASO -->
+      <section id="sec-tramites" class="space-y-6">
+        <div id="tramites-container" class="space-y-6">
+          <div class="p-10 text-center bg-white rounded-3xl border border-slate-200 text-slate-400">
+            <div class="animate-spin inline-block h-6 w-6 border-2 border-yeleblue border-t-transparent rounded-full mb-2"></div>
+            <p class="text-xs">Cargando tus solicitudes y citas...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: CENTRO DE NOTIFICACIONES -->
+      <section id="sec-notificaciones" class="hidden bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+        <h3 class="text-base font-bold text-yeledarkblue flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yeleorange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+          </svg>
+          Historial de Notificaciones y Avisos de Gerencia
+        </h3>
+        <p class="text-xs text-slate-500">Aquí verás las alertas automáticas sobre técnicos asignados y presupuestos listos.</p>
+
+        <div id="notificaciones-list" class="space-y-3 pt-2">
+          <div class="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl">
+            No tienes notificaciones pendientes.
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MODAL: DETALLE DE COTIZACIÓN FORMAL -->
+    <div id="cotizacion-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+      <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+        
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-yelewhiteblue rounded-t-3xl">
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-yeleorange bg-yelewhiteorange px-2 py-0.5 rounded-full border border-orange-200">
+              Expediente Formal
+            </span>
+            <h3 class="text-base font-bold text-yeledarkblue mt-1" id="cot-modal-code">Cotización</h3>
+          </div>
+          <button type="button" id="close-cot-modal" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-200/50 transition cursor-pointer">
+            ✕
+          </button>
+        </div>
+
+        <div class="p-6 space-y-4 text-xs">
+          <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+            <div class="flex justify-between text-slate-600">
+              <span>Materiales e Insumos</span>
+              <span id="cot-modal-mat" class="font-semibold text-slate-800">S/. 0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>Mano de Obra Calificada</span>
+              <span id="cot-modal-labor" class="font-semibold text-slate-800">S/. 0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>Gastos Operativos & Movilidad</span>
+              <span id="cot-modal-ops" class="font-semibold text-slate-800">S/. 0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>I.G.V. (18%)</span>
+              <span id="cot-modal-igv" class="font-semibold text-slate-800">S/. 0.00</span>
+            </div>
+            <div class="flex justify-between text-base font-bold text-yeledarkblue pt-2 border-t border-slate-200">
+              <span>TOTAL APROBADO:</span>
+              <span id="cot-modal-total" class="text-yeleorange text-lg font-black">S/. 0.00</span>
+            </div>
+          </div>
+
+          <div class="space-y-1 text-slate-500">
+            <p><strong>Tiempo estimado:</strong> <span id="cot-modal-time">2 a 3 días hábiles</span></p>
+            <p><strong>Condiciones de pago:</strong> <span id="cot-modal-cond">50% adelanto y 50% a la entrega</span></p>
+          </div>
+
+          <!-- Acciones de Aprobación del Cliente -->
+          <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-end gap-3" id="cot-actions-container">
+            <input type="hidden" id="selected-cot-id" />
+            <button
+              type="button"
+              id="btn-rechazar-cot"
+              class="px-4 py-2.5 rounded-xl border border-red-200 text-red-600 font-bold hover:bg-red-50 transition cursor-pointer"
+            >
+              Rechazar / Solicitar Ajuste
+            </button>
+            <button
+              type="button"
+              id="btn-aprobar-cot"
+              class="px-5 py-2.5 rounded-xl text-white font-bold bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20 transition cursor-pointer flex items-center gap-1.5"
+            >
+              ✓ Aprobar Presupuesto
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    import { getActiveSessionUser, logoutUser } from '../../lib/supabase';
+
+    let allSolicitudes: any[] = [];
+    let allMensajes: any[] = [];
+    let currentUserId = '';
+
+    async function initPortal() {
+      // 1. Validar sesión
+      const user = await getActiveSessionUser();
+      if (!user) {
+        window.location.href = '/login?error=portal_auth';
+        return;
+      }
+
+      currentUserId = user.id;
+      const userNameEl = document.getElementById('portal-user-name');
+      if (userNameEl) {
+        userNameEl.innerText = `${user.nombres || ''} ${user.apellidos || ''} (${user.email})`;
+      }
+
+      // 2. Cargar trámites, notificaciones y mensajes
+      await loadPortalData();
+    }
+
+    async function loadPortalData() {
+      try {
+        const res = await fetch('/api/portal/mis-tramites');
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        allSolicitudes = data.solicitudes || [];
+        allMensajes = data.mensajes || [];
+
+        // Contadores
+        const countTramites = document.getElementById('count-tramites');
+        if (countTramites) countTramites.innerText = String(allSolicitudes.length);
+
+        const countNotif = document.getElementById('count-notif');
+        if (countNotif) countNotif.innerText = String(data.notificaciones?.length || 0);
+
+        renderTramites();
+        renderNotificaciones(data.notificaciones || []);
+      } catch (err: any) {
+        const container = document.getElementById('tramites-container');
+        if (container) {
+          container.innerHTML = `<div class="p-8 text-center text-red-500 text-xs">Error al consultar tus trámites: ${err.message}</div>`;
+        }
+      }
+    }
+
+    function renderTramites() {
+      const container = document.getElementById('tramites-container');
+      if (!container) return;
+
+      if (allSolicitudes.length === 0) {
+        container.innerHTML = `
+          <div class="p-12 text-center bg-white rounded-3xl border border-slate-200 text-slate-500 space-y-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <h3 class="font-bold text-slate-800 text-base">Aún no tienes solicitudes de cita registradas</h3>
+            <p class="text-xs text-slate-400 max-w-sm mx-auto">Solicita una visita técnica para que nuestros especialistas diagnostiquen tu problema.</p>
+            <a href="/contact" class="inline-block mt-2 px-5 py-2.5 rounded-xl bg-yeleblue text-white font-bold text-xs hover:bg-yeledarkblue transition">
+              Solicitar mi Primera Cita
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = allSolicitudes.map(s => {
+        const step = getStepIndex(s.estado);
+        const msgsOfThis = allMensajes.filter(m => m.solicitud_id === s.id);
+
+        return `
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+            
+            <!-- Cabecera de la Cita -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+              <div>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-yelewhiteorange text-yeleorange border border-orange-200 mb-1">
+                  Trámite #${s.id} • ${s.tipo}
+                </span>
+                <h3 class="text-lg font-bold text-yeledarkblue">${s.motivo}</h3>
+                <p class="text-xs text-slate-400">Programada para: <strong>${s.fecha}</strong> a las <strong>${s.hora}</strong> en ${s.direccion}</p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider ${getStatusBadgeClass(s.estado)}">
+                  Estado: ${s.estado.replace('_', ' ')}
+                </span>
+              </div>
+            </div>
+
+            <!-- STEPPER: LÍNEA DE TIEMPO DEL TRÁMITE -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Progreso de la Atención</h4>
+              <div class="grid grid-cols-5 gap-2 text-center text-[11px]">
+                
+                <div class="space-y-1.5">
+                  <div class="h-7 w-7 mx-auto rounded-full flex items-center justify-center font-bold text-white ${step >= 1 ? 'bg-emerald-600' : 'bg-slate-300'}">
+                    ${step >= 1 ? '✓' : '1'}
+                  </div>
+                  <span class="font-semibold block ${step >= 1 ? 'text-emerald-700' : 'text-slate-400'}">Registrada</span>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="h-7 w-7 mx-auto rounded-full flex items-center justify-center font-bold text-white ${step >= 2 ? 'bg-emerald-600' : 'bg-slate-300'}">
+                    ${step >= 2 ? '✓' : '2'}
+                  </div>
+                  <span class="font-semibold block ${step >= 2 ? 'text-emerald-700' : 'text-slate-400'}">Técnico Asignado</span>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="h-7 w-7 mx-auto rounded-full flex items-center justify-center font-bold text-white ${step >= 3 ? 'bg-emerald-600' : 'bg-slate-300'}">
+                    ${step >= 3 ? '✓' : '3'}
+                  </div>
+                  <span class="font-semibold block ${step >= 3 ? 'text-emerald-700' : 'text-slate-400'}">En Visita</span>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="h-7 w-7 mx-auto rounded-full flex items-center justify-center font-bold text-white ${step >= 4 ? 'bg-yeleorange' : 'bg-slate-300'}">
+                    ${step >= 4 ? '✓' : '4'}
+                  </div>
+                  <span class="font-semibold block ${step >= 4 ? 'text-yeledarkorange font-bold' : 'text-slate-400'}">Cotización Lista</span>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="h-7 w-7 mx-auto rounded-full flex items-center justify-center font-bold text-white ${step >= 5 ? 'bg-emerald-600' : 'bg-slate-300'}">
+                    ${step >= 5 ? '✓' : '5'}
+                  </div>
+                  <span class="font-semibold block ${step >= 5 ? 'text-emerald-700 font-bold' : 'text-slate-400'}">Conformidad</span>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Técnico Asignado (Si aplica) -->
+            ${s.tecnico_nombres ? `
+              <div class="p-4 bg-yelewhiteblue rounded-2xl border border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-3">
+                  <div class="h-9 w-9 rounded-xl bg-yeleblue text-white flex items-center justify-center font-bold text-xs uppercase shadow-xs">
+                    ${s.tecnico_nombres.charAt(0)}
+                  </div>
+                  <div>
+                    <span class="text-[10px] uppercase font-bold text-yeleblue">Técnico Asignado a tu Domicilio</span>
+                    <h5 class="font-bold text-yeledarkblue">${s.tecnico_nombres} ${s.tecnico_apellidos || ''}</h5>
+                    <p class="text-[11px] text-slate-500">Especialidad: ${s.tecnico_especialidad || 'General'}</p>
+                  </div>
+                </div>
+                ${s.tecnico_telefono ? `
+                  <a href="tel:${s.tecnico_telefono}" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition self-start sm:self-center">
+                    📞 Llamar al Técnico
+                  </a>
+                ` : ''}
+              </div>
+            ` : `
+              <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-800 flex items-center gap-2">
+                <span>⏳</span>
+                <span>Gerencia está evaluando la disponibilidad para asignarte al técnico más cercano a tu zona.</span>
+              </div>
+            `}
+
+            <!-- BANNER DE COTIZACIÓN (Si ya está cotizada) -->
+            ${s.cotizacion_id ? `
+              <div class="p-5 bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl border border-orange-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <span class="text-[10px] font-black uppercase text-yeledarkorange tracking-wider bg-white px-2 py-0.5 rounded-full border border-orange-200">
+                    Presupuesto Disponible
+                  </span>
+                  <h4 class="text-base font-bold text-yeledarkblue mt-1">Expediente ${s.codigo_cotizacion || 'COT'}</h4>
+                  <p class="text-xs text-slate-600">Monto total estimado: <strong class="text-base text-yeleorange font-extrabold">S/. ${parseFloat(s.cotizacion_total).toFixed(2)}</strong></p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <button 
+                    type="button" 
+                    class="btn-ver-cotizacion px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-yeleorange hover:bg-yeledarkorange shadow-md shadow-yeleorange/20 transition cursor-pointer"
+                    data-id="${s.cotizacion_id}"
+                    data-code="${s.codigo_cotizacion}"
+                    data-total="${s.cotizacion_total}"
+                    data-mat="${s.subtotal_materiales}"
+                    data-labor="${s.subtotal_mano_obra}"
+                    data-ops="${s.gastos_operativos}"
+                    data-igv="${s.igv}"
+                    data-time="${s.tiempo_estimado_entrega}"
+                    data-cond="${s.condiciones_pago}"
+                    data-status="${s.cotizacion_estado}"
+                  >
+                    Ver Desglose y Responder
+                  </button>
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- CHAT DIRECTO: BANDEJA DE MENSAJES CON GERENCIA -->
+            <div class="border border-slate-200 rounded-2xl overflow-hidden">
+              <div class="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                <span class="text-xs font-bold text-yeledarkblue flex items-center gap-1.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yeleblue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  Mensajes Directos con Gerencia (Trámite #${s.id})
+                </span>
+                <span class="text-[11px] text-slate-400">${msgsOfThis.length} mensaje(s)</span>
+              </div>
+
+              <!-- Historial de mensajes -->
+              <div class="p-4 space-y-3 max-h-56 overflow-y-auto bg-slate-50/50 text-xs">
+                ${msgsOfThis.length === 0 ? `
+                  <p class="text-slate-400 text-center italic py-2">No hay mensajes previos. Escríbele a Gerencia si tienes alguna duda.</p>
+                ` : msgsOfThis.map(m => `
+                  <div class="flex flex-col ${m.remitente_rol === 'cliente' ? 'items-end' : 'items-start'}">
+                    <div class="max-w-[80%] p-3 rounded-2xl shadow-2xs ${m.remitente_rol === 'cliente' ? 'bg-yeleblue text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'}">
+                      <p class="text-[10px] font-bold ${m.remitente_rol === 'cliente' ? 'text-orange-200' : 'text-yeleblue'} mb-0.5">
+                        ${m.remitente_rol === 'cliente' ? 'Tú (Cliente)' : 'Gerencia YELE'}
+                      </p>
+                      <p class="leading-relaxed">${m.mensaje}</p>
+                    </div>
+                    <span class="text-[9px] text-slate-400 mt-0.5 px-1">${new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- Enviar mensaje -->
+              <form class="p-2.5 bg-white border-t border-slate-200 flex items-center gap-2 form-send-msg" data-solicitud="${s.id}">
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="Escribe tu mensaje a Gerencia sobre esta cita..." 
+                  class="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-yeleblue msg-input" 
+                />
+                <button 
+                  type="submit" 
+                  class="px-4 py-2 bg-yeleblue hover:bg-yeledarkblue text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                >
+                  Enviar
+                </button>
+              </form>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      // Listeners para abrir modal de cotización
+      document.querySelectorAll('.btn-ver-cotizacion').forEach(btn => {
+        btn.addEventListener('click', (e: any) => {
+          const el = e.currentTarget;
+          openCotizacionModal({
+            id: el.getAttribute('data-id'),
+            code: el.getAttribute('data-code'),
+            total: el.getAttribute('data-total'),
+            mat: el.getAttribute('data-mat'),
+            labor: el.getAttribute('data-labor'),
+            ops: el.getAttribute('data-ops'),
+            igv: el.getAttribute('data-igv'),
+            time: el.getAttribute('data-time'),
+            cond: el.getAttribute('data-cond'),
+            status: el.getAttribute('data-status'),
+          });
+        });
+      });
+
+      // Listeners para enviar mensaje
+      document.querySelectorAll('.form-send-msg').forEach(form => {
+        form.addEventListener('submit', async (e: any) => {
+          e.preventDefault();
+          const solicitudId = parseInt(e.target.getAttribute('data-solicitud'));
+          const input = e.target.querySelector('.msg-input') as HTMLInputElement;
+          const text = input.value.trim();
+          if (!text) return;
+
+          try {
+            const res = await fetch('/api/portal/enviar-mensaje', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ solicitud_id: solicitudId, mensaje: text }),
+            });
+            const d = await res.json();
+            if (!res.ok) throw new Error(d.error);
+            input.value = '';
+            await loadPortalData();
+          } catch (err: any) {
+            alert('Error al enviar mensaje: ' + err.message);
+          }
+        });
+      });
+    }
+
+    function renderNotificaciones(notificaciones: any[]) {
+      const container = document.getElementById('notificaciones-list');
+      if (!container) return;
+
+      if (notificaciones.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl">No tienes notificaciones pendientes.</div>`;
+        return;
+      }
+
+      container.innerHTML = notificaciones.map(n => `
+        <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 flex items-start gap-3 hover:bg-slate-100/60 transition">
+          <div class="p-2 rounded-xl bg-yelewhiteorange text-yeleorange shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
+          </div>
+          <div class="flex-1 text-xs">
+            <div class="flex items-center justify-between">
+              <h5 class="font-bold text-yeledarkblue">${n.titulo}</h5>
+              <span class="text-[10px] text-slate-400">${new Date(n.created_at).toLocaleDateString()}</span>
+            </div>
+            <p class="text-slate-600 mt-0.5">${n.mensaje}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getStepIndex(estado: string): number {
+      if (estado === 'pendiente') return 1;
+      if (estado === 'asignada') return 2;
+      if (estado === 'en_sitio' || estado === 'informe_enviado') return 3;
+      if (estado === 'cotizada') return 4;
+      if (estado === 'aprobada' || estado === 'completada') return 5;
+      return 1;
+    }
+
+    function getStatusBadgeClass(estado: string): string {
+      const map: Record<string, string> = {
+        pendiente: 'bg-amber-50 text-amber-700 border border-amber-200',
+        asignada: 'bg-blue-50 text-yeleblue border border-blue-200',
+        en_sitio: 'bg-purple-50 text-purple-700 border border-purple-200',
+        informe_enviado: 'bg-orange-50 text-yeledarkorange border border-orange-200',
+        cotizada: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+        aprobada: 'bg-emerald-100 text-emerald-800 border border-emerald-300',
+        rechazada: 'bg-red-50 text-red-700 border border-red-200',
+      };
+      return map[estado] || 'bg-slate-100 text-slate-600';
+    }
+
+    // Modal Cotización Logic
+    const cotModal = document.getElementById('cotizacion-modal');
+    function openCotizacionModal(data: any) {
+      (document.getElementById('selected-cot-id') as HTMLInputElement).value = data.id;
+      document.getElementById('cot-modal-code')!.innerText = `Presupuesto ${data.code || ''}`;
+      document.getElementById('cot-modal-mat')!.innerText = `S/. ${parseFloat(data.mat || 0).toFixed(2)}`;
+      document.getElementById('cot-modal-labor')!.innerText = `S/. ${parseFloat(data.labor || 0).toFixed(2)}`;
+      document.getElementById('cot-modal-ops')!.innerText = `S/. ${parseFloat(data.ops || 0).toFixed(2)}`;
+      document.getElementById('cot-modal-igv')!.innerText = `S/. ${parseFloat(data.igv || 0).toFixed(2)}`;
+      document.getElementById('cot-modal-total')!.innerText = `S/. ${parseFloat(data.total || 0).toFixed(2)}`;
+      document.getElementById('cot-modal-time')!.innerText = data.time || '2 a 3 días hábiles';
+      document.getElementById('cot-modal-cond')!.innerText = data.cond || '50% adelanto y 50% al finalizar';
+
+      const actions = document.getElementById('cot-actions-container');
+      if (actions) {
+        if (data.status === 'aceptada') {
+          actions.innerHTML = `<span class="text-xs font-bold text-emerald-600">✓ Cotización aprobada previamente.</span>`;
+        } else if (data.status === 'rechazada') {
+          actions.innerHTML = `<span class="text-xs font-bold text-red-600">✕ Cotización desestimada.</span>`;
+        }
+      }
+
+      cotModal?.classList.remove('hidden');
+    }
+
+    document.getElementById('close-cot-modal')?.addEventListener('click', () => {
+      cotModal?.classList.add('hidden');
+    });
+
+    async function responderCotizacion(decision: 'aceptada' | 'rechazada') {
+      const cotId = parseInt((document.getElementById('selected-cot-id') as HTMLInputElement).value);
+      let motivo = '';
+      if (decision === 'rechazada') {
+        motivo = prompt('Por favor indícanos brevemente el motivo para que Gerencia ajuste la propuesta:') || '';
+      }
+
+      try {
+        const res = await fetch('/api/portal/responder-cotizacion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cotizacion_id: cotId, decision, motivo }),
+        });
+        const d = await res.json();
+        if (!res.ok) throw new Error(d.error);
+        alert(d.message);
+        cotModal?.classList.add('hidden');
+        await loadPortalData();
+      } catch (err: any) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    document.getElementById('btn-aprobar-cot')?.addEventListener('click', () => responderCotizacion('aceptada'));
+    document.getElementById('btn-rechazar-cot')?.addEventListener('click', () => responderCotizacion('rechazada'));
+
+    // Pestañas
+    const tabTramitesBtn = document.getElementById('tab-tramites-btn');
+    const tabNotifBtn = document.getElementById('tab-notif-btn');
+    const secTramites = document.getElementById('sec-tramites');
+    const secNotificaciones = document.getElementById('sec-notificaciones');
+
+    tabTramitesBtn?.addEventListener('click', () => {
+      tabTramitesBtn.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-yeledarkblue text-white shadow-sm transition flex items-center gap-2 cursor-pointer';
+      tabNotifBtn!.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-600 hover:text-yeledarkblue border border-slate-200 transition flex items-center gap-2 cursor-pointer';
+      secTramites?.classList.remove('hidden');
+      secNotificaciones?.classList.add('hidden');
+    });
+
+    tabNotifBtn?.addEventListener('click', () => {
+      tabNotifBtn.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-yeledarkblue text-white shadow-sm transition flex items-center gap-2 cursor-pointer';
+      tabTramitesBtn!.className = 'px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-slate-600 hover:text-yeledarkblue border border-slate-200 transition flex items-center gap-2 cursor-pointer';
+      secNotificaciones?.classList.remove('hidden');
+      secTramites?.classList.add('hidden');
+    });
+
+    // Logout
+    document.getElementById('portal-logout-btn')?.addEventListener('click', async () => {
+      await logoutUser();
+    });
+
+    initPortal();
+  </script>
+</Layout>

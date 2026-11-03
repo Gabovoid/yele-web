@@ -1,0 +1,1629 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Panel de Gerencia | YELE S.A.C.">
+  <div class="min-h-screen bg-yelewhiteblue text-slate-700 pb-16">
+    
+    <!-- Topbar Corporativo -->
+    <header class="bg-yeledarkblue text-white shadow-md sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-yeleorange flex items-center justify-center font-bold text-white shadow-sm">
+            Y
+          </div>
+          <div>
+            <h1 class="text-base font-bold leading-none tracking-tight text-white">Panel de Gerencia & Operaciones</h1>
+            <span class="text-xs text-orange-200">YELE S.A.C. — Gestión Central</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="text-right hidden sm:block">
+            <p id="admin-user-name" class="text-xs font-semibold text-white">Cargando perfil...</p>
+            <span class="inline-block px-2 py-0.5 text-[10px] bg-yelelightblue text-white rounded-full font-medium">
+              Rol: Gerencia / Administrador
+            </span>
+          </div>
+
+          <button
+            type="button"
+            id="logout-btn"
+            class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5 cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Salir
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+      
+      <!-- Resumen Ejecutivo (KPIs con botón de acción) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Citas Pendientes</p>
+            <h3 id="stat-pending" class="text-2xl font-bold text-yeledarkblue mt-1">--</h3>
+          </div>
+          <div class="h-12 w-12 rounded-xl bg-yelewhiteorange text-yeleorange flex items-center justify-center font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Técnicos en Equipo</p>
+            <h3 id="stat-techs" class="text-2xl font-bold text-yeledarkblue mt-1">--</h3>
+          </div>
+          <div class="h-12 w-12 rounded-xl bg-yelewhiteblue text-yeleblue flex items-center justify-center font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Informes por Evaluar</p>
+            <h3 id="stat-reports" class="text-2xl font-bold text-yeledarkblue mt-1">--</h3>
+          </div>
+          <div class="h-12 w-12 rounded-xl bg-orange-100 text-yeledarkorange flex items-center justify-center font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Cotizaciones Aprobadas</p>
+            <h3 id="stat-quotes" class="text-2xl font-bold text-emerald-600 mt-1">S/. 0.00</h3>
+            <p id="stat-quotes-sub" class="text-[11px] text-slate-400 mt-0.5">0 aprobadas por clientes</p>
+          </div>
+          <div class="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN EQUIPO DE TÉCNICOS & BOTÓN REGISTRAR TÉCNICO -->
+      <section class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-lg font-bold text-yeledarkblue flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yeleblue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+              Equipo de Técnicos Autorizados
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Personal operativo habilitado para atender citas y redactar informes de campo.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            id="open-tech-modal-btn"
+            class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-yeleorange hover:bg-yeledarkorange shadow-md shadow-yeleorange/20 transition cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            + Registrar Nuevo Técnico
+          </button>
+        </div>
+
+        <!-- Grid de Técnicos -->
+        <div id="technicians-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="p-4 text-center text-xs text-slate-400 col-span-full">Cargando personal técnico...</div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: ASIGNACIÓN DE TÉCNICOS A SOLICITUDES DE CLIENTES -->
+      <section class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-lg font-bold text-yeledarkblue flex items-center gap-2">
+              <span class="h-3 w-3 rounded-full bg-yeleorange"></span>
+              Citas y Solicitudes de Clientes
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Asigna técnicos calificados según fecha, hora y ubicación de la visita solicitada.
+            </p>
+          </div>
+
+
+        </div>
+
+        <!-- Tabla de Solicitudes -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                <th class="py-3 px-4 font-semibold">ID / Fecha</th>
+                <th class="py-3 px-4 font-semibold">Cliente</th>
+                <th class="py-3 px-4 font-semibold">Tipo / Motivo</th>
+                <th class="py-3 px-4 font-semibold">Dirección</th>
+                <th class="py-3 px-4 font-semibold text-center min-w-[170px]">Estado</th>
+                <th class="py-3 px-4 font-semibold text-right">Técnico Asignado</th>
+              </tr>
+            </thead>
+            <tbody id="solicitudes-table-body" class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="6" class="text-center py-8 text-slate-400">
+                  <div class="animate-spin inline-block h-6 w-6 border-2 border-yeleblue border-t-transparent rounded-full mb-2"></div>
+                  <p class="text-xs">Cargando solicitudes...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 3: EVALUACIÓN DE INFORMES Y COTIZADOR MANUAL -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Lista de Informes Técnicos Recibidos -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="text-base font-bold text-yeledarkblue flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yeleblue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                </svg>
+                Informes Técnicos Recientes
+              </h2>
+              <span id="informes-count-badge" class="px-2 py-0.5 rounded-full text-xs font-bold bg-yelewhiteorange text-yeleorange">
+                0
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mb-4">
+              Expedientes enviados desde campo por los técnicos. Abre el informe completo para revisar el diagnóstico o cotiza manualmente.
+            </p>
+
+            <div id="informes-list" class="space-y-3 max-h-[640px] overflow-y-auto pr-1">
+              <div class="p-4 rounded-2xl bg-yelewhiteblue border border-slate-100 text-xs text-slate-500 text-center">
+                No hay informes pendientes de evaluación.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Módulo de Cotización 100% MANUAL para Gerencia -->
+        <div id="cotizador-manual-container" class="lg:col-span-7 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between space-y-6">
+          <div class="space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div>
+                <h2 class="text-base font-bold text-yeledarkblue flex items-center gap-2">
+                  <span class="p-1.5 rounded-lg bg-yelewhiteorange text-yeleorange font-bold text-xs">
+                    Cotización 100% Manual
+                  </span>
+                  Elaboración de Presupuesto Formal
+                </h2>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  Redacta y desglosa libremente las partidas, insumos y costos que se enviarán al cliente.
+                </p>
+              </div>
+              <span id="manual-solicitud-badge" class="text-xs font-bold text-yeleblue bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
+                Selecciona una Cita / Informe
+              </span>
+            </div>
+
+            <!-- Selector de Solicitud/Cita a cotizar -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200">
+              <div>
+                <label for="manual-solicitud-select" class="block font-semibold text-slate-700 mb-1">Cita / Solicitud a Cotizar *</label>
+                <select id="manual-solicitud-select" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-semibold text-slate-800 focus:ring-2 focus:ring-yeleblue focus:outline-none">
+                  <option value="">-- Elige una cita de la lista --</option>
+                </select>
+              </div>
+              <div>
+                <label for="manual-quote-code" class="block font-semibold text-slate-700 mb-1">Código de Cotización</label>
+                <input type="text" id="manual-quote-code" value="COT-2026-XXXX" readonly class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-mono font-bold text-yeledarkblue" />
+              </div>
+              <div class="sm:col-span-2 text-[11px] text-slate-500 flex flex-wrap items-center justify-between gap-2 px-1">
+                <span id="manual-client-info">Cliente: Selecciona una solicitud arriba para ver sus datos</span>
+                <span id="manual-informe-tag" class="hidden text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">✓ Con informe técnico vinculado</span>
+              </div>
+            </div>
+
+            <!-- Tabla de Partidas Manuales -->
+            <!-- Banner de Cotización Rechazada previa -->
+            <div id="manual-rejection-alert" class="hidden p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-xs"></div>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <span>Partidas y Conceptos a Cobrar</span>
+                  <span class="text-[10px] font-normal text-slate-400">(Ingresa precios unitarios a tu criterio)</span>
+                </h3>
+                <button
+                  type="button"
+                  id="btn-add-item-row"
+                  class="px-3 py-1.5 text-xs font-bold bg-yelewhiteblue hover:bg-blue-100 text-yeleblue rounded-xl border border-blue-200 transition cursor-pointer flex items-center gap-1"
+                >
+                  + Agregar Fila
+                </button>
+              </div>
+
+              <div class="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table class="w-full text-xs text-left">
+                  <thead class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                    <tr>
+                      <th class="py-2.5 px-3 w-36">Tipo</th>
+                      <th class="py-2.5 px-3">Descripción / Concepto</th>
+                      <th class="py-2.5 px-3 w-20 text-center">Cant.</th>
+                      <th class="py-2.5 px-3 w-28 text-right">P. Unit (S/.)</th>
+                      <th class="py-2.5 px-3 w-28 text-right">Subtotal</th>
+                      <th class="py-2.5 px-2 w-10 text-center"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="manual-items-tbody" class="divide-y divide-slate-100 bg-white">
+                    <!-- Filas dinámicas generadas en JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Desglose de Totales Manuales -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+              <div class="space-y-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                <h4 class="font-bold text-slate-700 uppercase tracking-wider text-[11px]">Condiciones de la Oferta</h4>
+                <div>
+                  <label class="block font-medium text-slate-600 mb-1">Días de Validez</label>
+                  <input type="number" id="manual-validity" value="15" min="1" max="90" class="w-full bg-white border border-slate-200 rounded-lg p-2 font-medium" />
+                </div>
+                <div>
+                  <label class="block font-medium text-slate-600 mb-1">Tiempo Estimado de Ejecución</label>
+                  <input type="text" id="manual-delivery" value="2 a 3 días hábiles tras confirmación" class="w-full bg-white border border-slate-200 rounded-lg p-2 font-medium" />
+                </div>
+                <div>
+                  <label class="block font-medium text-slate-600 mb-1">Condiciones de Pago</label>
+                  <input type="text" id="manual-payment" value="50% de anticipo y 50% al finalizar conformidad" class="w-full bg-white border border-slate-200 rounded-lg p-2 font-medium" />
+                </div>
+                <div>
+                  <label class="block font-medium text-slate-600 mb-1">Observaciones / Garantía para el Cliente</label>
+                  <textarea id="manual-notes" rows="2" placeholder="Ej: Incluye 6 meses de garantía por mano de obra técnica..." class="w-full bg-white border border-slate-200 rounded-lg p-2 font-medium"></textarea>
+                </div>
+              </div>
+
+              <!-- Cuadro de Cálculo de Totales -->
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs flex flex-col justify-between space-y-3">
+                <h4 class="font-bold text-slate-700 uppercase tracking-wider text-[11px]">Resumen Económico</h4>
+                
+                <div class="space-y-2 bg-white p-3 rounded-xl border border-slate-200">
+                  <div class="flex justify-between text-slate-600">
+                    <span>Subtotal Materiales:</span>
+                    <span class="font-semibold text-slate-800" id="calc-sub-mat">S/. 0.00</span>
+                  </div>
+                  <div class="flex justify-between text-slate-600">
+                    <span>Subtotal Mano de Obra:</span>
+                    <span class="font-semibold text-slate-800" id="calc-sub-labor">S/. 0.00</span>
+                  </div>
+                  <div class="flex items-center justify-between text-slate-600">
+                    <span>Movilidad / Viáticos (S/.):</span>
+                    <input type="number" id="calc-ops" value="0.00" step="5" min="0" class="w-24 text-right bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 font-semibold" />
+                  </div>
+                  <div class="flex items-center justify-between text-slate-600">
+                    <span>Descuento Comercial (S/.):</span>
+                    <input type="number" id="calc-discount" value="0.00" step="5" min="0" class="w-24 text-right bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 font-semibold text-rose-600" />
+                  </div>
+                  <div class="flex items-center justify-between text-slate-600 pt-1 border-t border-slate-100">
+                    <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700 select-none">
+                      <input type="checkbox" id="calc-include-igv" checked class="rounded border-slate-300 text-yeleblue focus:ring-yeleblue" />
+                      <span>Incluir I.G.V. (18%)</span>
+                    </label>
+                    <span class="font-semibold text-slate-800" id="calc-igv">S/. 0.00</span>
+                  </div>
+                </div>
+
+                <div class="p-3 bg-yelewhiteorange rounded-xl border border-orange-200 flex items-center justify-between">
+                  <span class="font-extrabold text-xs text-yeledarkblue uppercase">TOTAL A COTIZAR:</span>
+                  <span id="calc-total" class="text-xl font-black text-yeleorange">S/. 0.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alerta del formulario -->
+            <div id="manual-quote-alert" class="hidden p-3 rounded-xl text-xs font-medium"></div>
+
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-end gap-3">
+            <button
+              type="button"
+              id="btn-limpiar-cotizador"
+              class="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition cursor-pointer"
+            >
+              Limpiar Campos
+            </button>
+            <button
+              type="button"
+              id="btn-emit-manual-quote"
+              class="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-yeleorange hover:bg-yeledarkorange shadow-md shadow-yeleorange/20 transition cursor-pointer flex items-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>
+              </svg>
+              <span>Aprobar y Emitir al Cliente</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- MODAL: REGISTRAR NUEVO TÉCNICO -->
+    <div id="tech-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+      <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+        
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-yelewhiteblue rounded-t-3xl">
+          <div>
+            <h3 class="text-base font-bold text-yeledarkblue">Dar de Alta a un Nuevo Técnico</h3>
+            <p class="text-xs text-slate-500">Crea credenciales corporativas para tu personal de campo.</p>
+          </div>
+          <button type="button" id="close-tech-modal" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-200/50 transition cursor-pointer">
+            ✕
+          </button>
+        </div>
+
+        <form id="nuevo-tecnico-form" class="p-6 space-y-4 text-xs">
+          <div id="tech-modal-alert" class="hidden p-3 rounded-xl font-medium"></div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Nombres *</label>
+              <input type="text" id="tech-names" required placeholder="Ej: Mario" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none" />
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Apellidos *</label>
+              <input type="text" id="tech-lastnames" required placeholder="Ej: Vargas" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Correo Corporativo *</label>
+              <input type="email" id="tech-email" required placeholder="tecnico@yele.com" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none" />
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Teléfono Móvil *</label>
+              <input type="tel" id="tech-phone" required placeholder="987654321" pattern="9[0-9]{8}" maxlength="9" inputmode="numeric" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Especialidad Principal *</label>
+            <select id="tech-specialty" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none bg-white">
+              <option value="Electricidad e Instalaciones">Electricidad e Instalaciones</option>
+              <option value="Climatización y HVAC">Climatización y HVAC</option>
+              <option value="Tableros Eléctricos e Industrial">Tableros Eléctricos e Industrial</option>
+              <option value="Plomería y Redes Sanitarias">Plomería y Redes Sanitarias</option>
+              <option value="Mantenimiento General Integral">Mantenimiento General Integral</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Contraseña Inicial *</label>
+            <input type="password" id="tech-password" required placeholder="Mínimo 6 caracteres" class="w-full p-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-yeleblue focus:outline-none" />
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+            <button type="button" id="cancel-tech-modal" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition cursor-pointer">
+              Cancelar
+            </button>
+            <button type="submit" id="submit-tech-btn" class="px-5 py-2.5 rounded-xl text-white font-bold bg-yeleorange hover:bg-yeledarkorange shadow-md shadow-yeleorange/20 transition cursor-pointer flex items-center gap-2">
+              <span>Guardar Técnico</span>
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- MODAL: CHAT DIRECTO CON EL CLIENTE -->
+    <div id="admin-chat-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+      <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[85vh]">
+        
+        <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-yelewhiteblue rounded-t-3xl">
+          <div>
+            <h3 class="text-sm font-bold text-yeledarkblue flex items-center gap-2">
+              <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+              Canal de Comunicación con el Cliente
+            </h3>
+            <p class="text-xs text-slate-500" id="admin-chat-title">Trámite #--</p>
+          </div>
+          <button type="button" id="close-admin-chat" class="p-1.5 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-200/50 transition cursor-pointer">
+            ✕
+          </button>
+        </div>
+
+        <div id="admin-chat-messages" class="flex-1 p-4 space-y-3 overflow-y-auto bg-slate-50/50 text-xs min-h-[220px]">
+          <!-- mensajes -->
+        </div>
+
+        <form id="admin-chat-form" class="p-3 bg-white border-t border-slate-100 flex items-center gap-2 rounded-b-3xl">
+          <input type="hidden" id="admin-chat-solicitud-id" />
+          <input 
+            type="text" 
+            id="admin-chat-input"
+            required 
+            placeholder="Escribe una respuesta o aviso al cliente..." 
+            class="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-yeleblue"
+          />
+          <button 
+            type="submit" 
+            class="px-4 py-2 bg-yeleblue hover:bg-yeledarkblue text-white text-xs font-bold rounded-xl transition cursor-pointer"
+          >
+            Enviar
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL: DETALLE DEL INFORME TÉCNICO COMPLETO -->
+    <div id="informe-detail-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+      <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[90vh]">
+        
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-yelewhiteblue rounded-t-3xl">
+          <div>
+            <h3 class="text-base font-bold text-yeledarkblue flex items-center gap-2">
+              <span id="detail-informe-title">Expediente de Informe Técnico</span>
+              <span id="detail-informe-priority" class="px-2 py-0.5 rounded-full text-[10px] uppercase font-bold bg-amber-100 text-amber-800 border border-amber-200">Media</span>
+            </h3>
+            <p class="text-xs text-slate-500" id="detail-informe-subtitle">Inspección de campo remitida por el personal técnico</p>
+          </div>
+          <button type="button" id="close-informe-detail-modal" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-200/50 transition cursor-pointer">
+            ✕
+          </button>
+        </div>
+
+        <div class="p-6 overflow-y-auto space-y-5 text-xs">
+          <!-- Datos de la Cita y del Cliente -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold uppercase">Cliente Titular</span>
+              <p class="font-bold text-slate-800 text-sm" id="detail-cliente-name">--</p>
+              <p class="text-slate-500" id="detail-cliente-contact">--</p>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold uppercase">Ubicación / Dirección</span>
+              <p class="font-medium text-slate-700" id="detail-cliente-address">--</p>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold uppercase">Técnico que Atendió</span>
+              <p class="font-semibold text-yeledarkblue" id="detail-tecnico-name">--</p>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold uppercase">Horas Estimadas de Trabajo</span>
+              <p class="font-mono font-bold text-slate-700" id="detail-horas-est">--</p>
+            </div>
+          </div>
+
+          <!-- Diagnóstico Técnico -->
+          <div>
+            <h4 class="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1.5 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+              <span>Diagnóstico del Problema</span>
+            </h4>
+            <div id="detail-diagnostico" class="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/70 text-slate-700 leading-relaxed font-medium">
+              --
+            </div>
+          </div>
+
+          <!-- Trabajo Realizado / Sugerido -->
+          <div>
+            <h4 class="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1.5 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
+              <span>Trabajo Sugerido / Realizado en Sitio</span>
+            </h4>
+            <div id="detail-trabajo" class="p-3.5 bg-blue-50/50 rounded-xl border border-blue-100 text-slate-700 leading-relaxed font-medium">
+              --
+            </div>
+          </div>
+
+          <!-- Materiales Requeridos -->
+          <div>
+            <h4 class="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1.5 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+              </svg>
+              <span>Materiales y Repuestos Solicitados por el Técnico</span>
+            </h4>
+            <div id="detail-materiales-container" class="border border-slate-200 rounded-xl overflow-hidden">
+              <!-- Tabla de materiales -->
+            </div>
+          </div>
+
+          <!-- Observaciones / Recomendaciones -->
+          <div>
+            <h4 class="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1.5 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <span>Recomendaciones y Observaciones Finales</span>
+            </h4>
+            <div id="detail-observaciones" class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-slate-600 italic">
+              --
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50 rounded-b-3xl">
+          <button type="button" id="cancel-informe-detail" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-100 transition cursor-pointer text-xs">
+            Cerrar
+          </button>
+          <button 
+            type="button" 
+            id="detail-proceder-cotizar-btn" 
+            class="px-5 py-2.5 rounded-xl text-white font-bold bg-yeleorange hover:bg-yeledarkorange shadow-sm transition cursor-pointer text-xs flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            <span>Proceder a Cotizar Este Informe Manualmente</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  <script>
+  import { getActiveSessionUser, logoutUser } from '../../lib/supabase';
+
+  let currentAdminUser: any = null;
+  let techniciansList: any[] = [];
+  let allSolicitudesList: any[] = [];
+  let allInformesList: any[] = [];
+
+  // Partidas manuales del cotizador
+  interface ManualItem {
+    id: string;
+    tipo: 'material' | 'mano_de_obra' | 'servicio' | 'viatico';
+    descripcion: string;
+    cantidad: number;
+    unidad: string;
+    precio_unitario: number;
+    subtotal: number;
+  }
+  let manualItems: ManualItem[] = [];
+  let activeInformeIdParaCotizar: number | null = null;
+
+  async function checkAdminAuth() {
+    const user = await getActiveSessionUser();
+    if (!user || user.role !== 'admin') {
+      window.location.href = '/login';
+      return;
+    }
+    currentAdminUser = user;
+    const nameEl = document.getElementById('admin-user-name');
+    if (nameEl) {
+      nameEl.innerText = `${user.nombres || 'Administrador'} ${user.apellidos || ''}`;
+    }
+
+    await reloadTechnicians();
+    await loadSolicitudes();
+    await loadInformes();
+
+    // Inicializar 1 partida por defecto en el cotizador
+    if (manualItems.length === 0) {
+      addManualItem('servicio', 'Diagnóstico y servicio técnico de mantenimiento', 1, 'serv', 80);
+    }
+  }
+
+  // 1. Cargar Técnicos
+  async function reloadTechnicians() {
+    try {
+      const res = await fetch('/api/admin/tecnicos');
+      const data = await res.json();
+      techniciansList = data.tecnicos || [];
+    } catch (err) {
+      console.error('Error cargando técnicos:', err);
+      techniciansList = [];
+    }
+
+    const statTechs = document.getElementById('stat-techs');
+    if (statTechs) statTechs.innerText = String(techniciansList.length);
+
+    const grid = document.getElementById('technicians-grid');
+    if (grid) {
+      if (techniciansList.length === 0) {
+        grid.innerHTML = `<div class="p-6 bg-slate-50 rounded-2xl text-center text-xs text-slate-400 col-span-full">No tienes técnicos registrados. Haz clic en "+ Registrar Nuevo Técnico".</div>`;
+      } else {
+        grid.innerHTML = techniciansList.map(t => `
+          <div class="p-4 rounded-2xl border border-slate-200 bg-white hover:border-yeleblue/40 shadow-xs transition space-y-2">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="h-9 w-9 rounded-xl bg-yelewhiteblue text-yeleblue flex items-center justify-center font-bold text-xs uppercase border border-blue-100">
+                  ${(t.nombres || 'T').charAt(0)}
+                </div>
+                <div>
+                  <h4 class="font-bold text-yeledarkblue text-xs">${t.nombres} ${t.apellidos || ''}</h4>
+                  <p class="text-[11px] text-slate-400">${t.email}</p>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${t.activo ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}">
+                ${t.activo ? 'Activo' : 'Inactivo'}
+              </span>
+            </div>
+            <div class="text-[11px] bg-slate-50 p-2 rounded-xl text-slate-600 flex justify-between">
+              <span>Especialidad:</span>
+              <span class="font-semibold text-yeledarkblue">${t.especialidad || 'General'}</span>
+            </div>
+            <div class="text-[11px] text-slate-500 flex justify-between px-1">
+              <span>Teléfono:</span>
+              <span class="font-mono text-slate-700">${t.telefono || 'Sin registrar'}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+  }
+
+  // 2. Cargar Solicitudes
+  async function loadSolicitudes() {
+    const tbody = document.getElementById('solicitudes-table-body');
+    const statPending = document.getElementById('stat-pending');
+
+    try {
+      const res = await fetch('/api/admin/solicitudes');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      allSolicitudesList = data.solicitudes || [];
+    } catch (err: any) {
+      if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Error al cargar solicitudes: ${err.message}</td></tr>`;
+      return;
+    }
+
+    const pendingCount = allSolicitudesList.filter(s => s.estado === 'pendiente').length;
+    if (statPending) statPending.innerText = String(pendingCount);
+
+    // Sumar cotizaciones aprobadas por el cliente
+    const aprobadas = allSolicitudesList.filter(s => s.estado === 'aprobada' || s.cotizacion_estado === 'aprobada' || s.cotizacion_estado === 'aceptada');
+    const sumaAprobadas = aprobadas.reduce((sum, s) => sum + (parseFloat(s.cotizacion_total) || 0), 0);
+    const statQuotes = document.getElementById('stat-quotes');
+    if (statQuotes) {
+      statQuotes.innerText = `S/. ${sumaAprobadas.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+    const statQuotesSub = document.getElementById('stat-quotes-sub');
+    if (statQuotesSub) {
+      statQuotesSub.innerText = `${aprobadas.length} aprobada${aprobadas.length === 1 ? '' : 's'} por cliente`;
+    }
+
+    // Actualizar selector de citas en el cotizador manual
+    updateManualSolicitudSelect();
+
+    if (allSolicitudesList.length === 0) {
+      if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">No hay citas registradas todavía.</td></tr>`;
+      return;
+    }
+
+    if (tbody) {
+      tbody.innerHTML = allSolicitudesList.map(s => {
+        const statusBadge = getStatusBadge(s.estado);
+        const techOptions = techniciansList.map(t => 
+          `<option value="${t.id}" ${s.tecnico_id === t.id ? 'selected' : ''}>${t.nombres} ${t.apellidos} (${t.especialidad || 'General'})</option>`
+        ).join('');
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition-colors">
+            <td class="py-3 px-4 font-mono text-xs whitespace-nowrap">
+              <span class="font-bold text-yeledarkblue">#${s.id}</span>
+              <div class="text-slate-400 text-[11px] font-sans">${formatCitaDate(s.fecha)} • ${s.hora || ''}</div>
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-semibold text-slate-800">${s.nombres} ${s.apellidos}</div>
+              <div class="text-slate-400 text-xs">${s.correo} • ${s.telefono}</div>
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-medium text-slate-700">${s.motivo}</div>
+              <div class="text-slate-400 text-[11px]">${s.tipo}</div>
+            </td>
+            <td class="py-3 px-4 text-xs text-slate-600 max-w-[180px] truncate" title="${s.direccion}">
+              ${s.direccion}
+            </td>
+            <td class="py-3 px-4 text-center whitespace-nowrap">${statusBadge}</td>
+            <td class="py-3 px-4 text-right">
+              <div class="flex items-center justify-end gap-1.5">
+                <select 
+                  data-solicitud-id="${s.id}" 
+                  class="assign-tech-select text-xs bg-slate-50 border border-slate-200 rounded-lg p-1.5 focus:ring-2 focus:ring-yeleblue focus:outline-none"
+                >
+                  <option value="">-- Asignar Técnico --</option>
+                  ${techOptions}
+                </select>
+                <button
+                  type="button"
+                  class="btn-open-chat px-2.5 py-1.5 bg-yelewhiteblue hover:bg-blue-100 text-yeleblue rounded-lg text-xs font-bold border border-blue-200 transition cursor-pointer flex items-center gap-1"
+                  data-id="${s.id}"
+                  data-client="${s.nombres} ${s.apellidos}"
+                  title="Chatear con el cliente"
+                >
+                  💬 Chat
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.assign-tech-select').forEach(select => {
+        select.addEventListener('change', async (e: any) => {
+          const solicitudId = e.target.getAttribute('data-solicitud-id');
+          const tecnicoId = e.target.value || null;
+          await assignTechnician(solicitudId, tecnicoId);
+        });
+      });
+
+      document.querySelectorAll('.btn-open-chat').forEach(btn => {
+        btn.addEventListener('click', (e: any) => {
+          const el = e.currentTarget;
+          const solicitudId = el.getAttribute('data-id');
+          const clientName = el.getAttribute('data-client');
+          openAdminChat(solicitudId, clientName);
+        });
+      });
+    }
+  }
+
+  // Asignar Técnico
+  async function assignTechnician(solicitudId: string, tecnicoId: string | null) {
+    try {
+      const res = await fetch('/api/admin/solicitudes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          solicitud_id: parseInt(solicitudId, 10),
+          tecnico_id: tecnicoId || null,
+        }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error);
+      await loadSolicitudes();
+    } catch (err: any) {
+      alert('Error al asignar técnico: ' + err.message);
+    }
+  }
+
+  // 3. Cargar Informes Técnicos Recientes
+  async function loadInformes() {
+    const informesList = document.getElementById('informes-list');
+    const statReports = document.getElementById('stat-reports');
+    const badgeCount = document.getElementById('informes-count-badge');
+
+    try {
+      const res = await fetch('/api/admin/informes');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      allInformesList = data.informes || [];
+    } catch (err: any) {
+      console.error('Error al cargar informes:', err);
+      allInformesList = [];
+    }
+
+    // Filtrar: Si el cliente aprobó la cotización, se retira de la lista de pendientes de cotización
+    const informesPendientes = allInformesList.filter(inf => 
+      inf.solicitud_estado !== 'aprobada' && 
+      inf.cotizacion_estado !== 'aprobada' && 
+      inf.cotizacion_estado !== 'aceptada'
+    );
+
+    if (statReports) statReports.innerText = String(informesPendientes.length);
+    if (badgeCount) badgeCount.innerText = String(informesPendientes.length);
+
+    if (informesList) {
+      if (informesPendientes.length === 0) {
+        informesList.innerHTML = `<div class="p-6 bg-slate-50 rounded-2xl text-center text-xs text-slate-400">No hay informes pendientes de cotización. Todas las cotizaciones fueron atendidas o aprobadas.</div>`;
+      } else {
+        informesList.innerHTML = informesPendientes.map(inf => {
+          const horas = inf.horas_hombre_estimadas || inf.horas_estimadas || 2;
+          const prio = inf.nivel_prioridad || 'media';
+          const esRechazada = inf.solicitud_estado === 'rechazada' || inf.cotizacion_estado === 'rechazada';
+
+          const prioClass = esRechazada 
+            ? 'bg-rose-100 text-rose-800 border-rose-300' 
+            : (prio === 'alta' || prio === 'critica' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-amber-50 text-amber-700 border-amber-200');
+
+          return `
+            <div class="p-4 rounded-2xl border ${esRechazada ? 'border-rose-300 bg-rose-50/20' : 'border-slate-200 bg-white'} hover:border-yeleblue/40 transition shadow-xs space-y-2.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-yeledarkblue">Informe Cita #${inf.solicitud_id}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${prioClass}">
+                  ${esRechazada ? 'Rechazada por Cliente' : `Prioridad ${prio}`}
+                </span>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-slate-800">${inf.cliente_nombres || ''} ${inf.cliente_apellidos || ''}</p>
+                <p class="text-[11px] text-slate-400">Motivo: ${inf.solicitud_motivo || 'General'}</p>
+              </div>
+
+              ${esRechazada ? `
+                <div class="p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-[11px] space-y-1">
+                  <div class="font-bold flex items-center gap-1.5 text-rose-700">
+                    <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                    </svg>
+                    <span>Cotización rechazada (${inf.codigo_cotizacion || ''})</span>
+                  </div>
+                  <p class="italic text-slate-700"><strong>Motivo del cliente:</strong> "${inf.cotizacion_motivo_rechazo || 'No se indicó motivo específico.'}"</p>
+                </div>
+              ` : `
+                <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 line-clamp-2">
+                  <strong>Diagnóstico:</strong> ${inf.diagnostico}
+                </p>
+              `}
+
+              <div class="text-[11px] text-slate-500 flex justify-between">
+                <span>Técnico: <strong class="text-yeledarkblue">${inf.tecnico_nombres || 'Técnico'} ${inf.tecnico_apellidos || ''}</strong></span>
+                <span>Est.: <strong>${horas} hrs</strong></span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-100">
+                <button 
+                  type="button" 
+                  class="btn-ver-informe-detalle py-1.5 px-2 bg-yelewhiteblue hover:bg-blue-100 text-yeleblue font-bold text-xs rounded-xl border border-blue-200 transition cursor-pointer flex items-center justify-center gap-1.5"
+                  data-informe-id="${inf.id}"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <span>Abrir Informe</span>
+                </button>
+                <button 
+                  type="button" 
+                  class="btn-iniciar-cotizar-manual py-1.5 px-2 ${esRechazada ? 'bg-rose-600 hover:bg-rose-700 text-white' : 'bg-yeleorange hover:bg-yeledarkorange text-white'} font-bold text-xs rounded-xl shadow-xs transition cursor-pointer flex items-center justify-center gap-1.5"
+                  data-informe-id="${inf.id}"
+                  data-solicitud-id="${inf.solicitud_id}"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                  </svg>
+                  <span>${esRechazada ? 'Ajustar y Re-cotizar' : 'Cotizar Manual'}</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Listeners para abrir modal de detalle
+        document.querySelectorAll('.btn-ver-informe-detalle').forEach(btn => {
+          btn.addEventListener('click', (e: any) => {
+            const informeId = parseInt(e.currentTarget.getAttribute('data-informe-id'), 10);
+            const inf = allInformesList.find(i => Number(i.id) === informeId);
+            if (inf) openInformeDetailModal(inf);
+          });
+        });
+
+        // Listeners para cotizar manualmente
+        document.querySelectorAll('.btn-iniciar-cotizar-manual').forEach(btn => {
+          btn.addEventListener('click', (e: any) => {
+            const infId = parseInt(e.currentTarget.getAttribute('data-informe-id'), 10);
+            const solId = parseInt(e.currentTarget.getAttribute('data-solicitud-id'), 10);
+            iniciarCotizacionManual(solId, infId);
+          });
+        });
+      }
+    }
+  }
+
+  // 4. Modal Ver Informe Técnico Completo
+  function safeSetText(id: string, text: string) {
+    const el = document.getElementById(id);
+    if (el) el.innerText = text;
+  }
+
+  function openInformeDetailModal(inf: any) {
+    const modal = document.getElementById('informe-detail-modal');
+    if (!modal) {
+      console.error('Modal #informe-detail-modal no encontrado en el DOM');
+      return;
+    }
+
+    safeSetText('detail-informe-title', `Informe Técnico — Cita #${inf.solicitud_id}`);
+    safeSetText('detail-informe-priority', (inf.nivel_prioridad || 'media').toUpperCase());
+    safeSetText('detail-cliente-name', `${inf.cliente_nombres || ''} ${inf.cliente_apellidos || ''}`);
+    safeSetText('detail-cliente-contact', `Tel: ${inf.cliente_telefono || 'No registrado'} • ${inf.cliente_correo || ''}`);
+    safeSetText('detail-cliente-address', inf.solicitud_direccion || 'No especificada');
+    safeSetText('detail-tecnico-name', `${inf.tecnico_nombres || 'Técnico'} ${inf.tecnico_apellidos || ''}`);
+    safeSetText('detail-horas-est', `${inf.horas_hombre_estimadas || inf.horas_estimadas || 2} horas hombre`);
+    safeSetText('detail-diagnostico', inf.diagnostico || 'Sin diagnóstico registrado.');
+    safeSetText('detail-trabajo', inf.trabajo_sugerido || inf.trabajo_realizado || 'No se detalló trabajo en campo.');
+    safeSetText('detail-observaciones', inf.observaciones || inf.recomendaciones || 'Sin observaciones adicionales.');
+
+    // Tabla de Materiales
+    const matContainer = document.getElementById('detail-materiales-container');
+    let mats: any[] = [];
+    if (typeof inf.materiales_requeridos === 'string') {
+      try { mats = JSON.parse(inf.materiales_requeridos); } catch { mats = []; }
+    } else if (Array.isArray(inf.materiales_requeridos)) {
+      mats = inf.materiales_requeridos;
+    }
+
+    if (matContainer) {
+      if (mats.length === 0) {
+        matContainer.innerHTML = `<div class="p-3 text-slate-400 italic bg-slate-50 text-center">El técnico no especificó materiales requeridos para esta cita.</div>`;
+      } else {
+        matContainer.innerHTML = `
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
+              <tr>
+                <th class="py-2 px-3">Material / Repuesto</th>
+                <th class="py-2 px-3 w-24 text-center">Cantidad</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+              ${mats.map(m => `
+                <tr>
+                  <td class="py-2 px-3 font-medium text-slate-800">${m.item || m.descripcion || 'Material'}</td>
+                  <td class="py-2 px-3 text-center font-bold text-yeledarkblue">${m.cantidad || 1}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+    }
+
+    // Configurar botón "Proceder a Cotizar Este Informe"
+    const cotizarBtn = document.getElementById('detail-proceder-cotizar-btn');
+    if (cotizarBtn) {
+      cotizarBtn.onclick = () => {
+        closeInformeDetailModal();
+        iniciarCotizacionManual(Number(inf.solicitud_id), Number(inf.id));
+      };
+    }
+
+    modal.classList.remove('hidden');
+  }
+
+  function closeInformeDetailModal() {
+    const modal = document.getElementById('informe-detail-modal');
+    modal?.classList.add('hidden');
+  }
+
+  document.getElementById('close-informe-detail-modal')?.addEventListener('click', closeInformeDetailModal);
+  document.getElementById('cancel-informe-detail')?.addEventListener('click', closeInformeDetailModal);
+  document.getElementById('informe-detail-modal')?.addEventListener('click', (e: any) => {
+    if (e.target.id === 'informe-detail-modal') closeInformeDetailModal();
+  });
+
+  // 5. COTIZADOR 100% MANUAL PARA GERENCIA
+  function updateManualSolicitudSelect() {
+    const sel = document.getElementById('manual-solicitud-select') as HTMLSelectElement;
+    if (!sel) return;
+
+    const currentVal = sel.value;
+    // Excluir solicitudes que ya fueron aprobadas por el cliente
+    const cotizables = allSolicitudesList.filter(s => 
+      s.estado !== 'aprobada' && 
+      s.cotizacion_estado !== 'aprobada' && 
+      s.cotizacion_estado !== 'aceptada'
+    );
+
+    sel.innerHTML = '<option value="">-- Elige una cita de la lista --</option>' + 
+      cotizables.map(s => {
+        let tag = '';
+        if (s.estado === 'rechazada' || s.cotizacion_estado === 'rechazada') {
+          tag = ' [⚠️ RECHAZADA - Requiere Ajuste]';
+        } else if (s.estado === 'cotizada') {
+          tag = ' [⏳ Ya Cotizada]';
+        } else if (s.estado === 'informe_enviado') {
+          tag = ' [📋 Con Informe Listo]';
+        }
+        return `<option value="${s.id}">Cita #${s.id} — ${s.nombres} ${s.apellidos} (${s.motivo})${tag}</option>`;
+      }).join('');
+
+    if (currentVal && cotizables.some(s => String(s.id) === currentVal)) {
+      sel.value = currentVal;
+    }
+  }
+
+  // Iniciar Cotización Manual
+  function iniciarCotizacionManual(solicitudId: number, informeId?: number | null) {
+    const sel = document.getElementById('manual-solicitud-select') as HTMLSelectElement;
+    if (sel) {
+      sel.value = String(solicitudId);
+    }
+
+    activeInformeIdParaCotizar = informeId || null;
+    const sol = allSolicitudesList.find(s => Number(s.id) === solicitudId);
+    const inf = informeId 
+      ? allInformesList.find(i => Number(i.id) === informeId) 
+      : allInformesList.find(i => Number(i.solicitud_id) === solicitudId);
+
+    // Actualizar encabezados
+    const badge = document.getElementById('manual-solicitud-badge');
+    if (badge) badge.innerText = `Cotizando Cita #${solicitudId}`;
+
+    const codeInput = document.getElementById('manual-quote-code') as HTMLInputElement;
+    if (codeInput) codeInput.value = `COT-${new Date().getFullYear()}-${String(solicitudId).padStart(4, '0')}`;
+
+    const clientInfo = document.getElementById('manual-client-info');
+    if (clientInfo && sol) {
+      clientInfo.innerHTML = `<strong>Cliente:</strong> ${sol.nombres} ${sol.apellidos} • <strong>Tel:</strong> ${sol.telefono} • <strong>Motivo:</strong> ${sol.motivo}`;
+    }
+
+    const infTag = document.getElementById('manual-informe-tag');
+    if (infTag) {
+      if (inf) {
+        infTag.classList.remove('hidden');
+      } else {
+        infTag.classList.add('hidden');
+      }
+    }
+
+    // Alerta de Rechazo Previo si el cliente rechazó la cotización
+    const rejectionAlert = document.getElementById('manual-rejection-alert');
+    if (rejectionAlert) {
+      const esRechazada = (sol && (sol.estado === 'rechazada' || sol.cotizacion_estado === 'rechazada')) ||
+                          (inf && (inf.solicitud_estado === 'rechazada' || inf.cotizacion_estado === 'rechazada'));
+      if (esRechazada) {
+        const razon = inf?.cotizacion_motivo_rechazo || sol?.cotizacion_motivo_rechazo || 'El cliente solicitó ajustes en los costos o alcance.';
+        rejectionAlert.innerHTML = `
+          <div class="flex items-start gap-2.5">
+            <svg class="h-4 w-4 text-rose-600 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <div>
+              <span class="font-bold text-rose-800 block text-xs">⚠️ Cotización Previa Rechazada por el Cliente:</span>
+              <p class="text-rose-700 mt-0.5 italic">"${razon}"</p>
+              <p class="text-[11px] text-slate-600 mt-1 font-medium">Modifica las partidas o ajusta los precios unitarios y haz clic en <strong>"Aprobar y Emitir al Cliente"</strong> para enviarle la propuesta actualizada.</p>
+            </div>
+          </div>
+        `;
+        rejectionAlert.classList.remove('hidden');
+      } else {
+        rejectionAlert.classList.add('hidden');
+        rejectionAlert.innerHTML = '';
+      }
+    }
+
+    // Inicializar partidas manuales
+    manualItems = [];
+
+    // Si viene de un informe, cargar los materiales detectados para que Gerencia les ponga precio manualmente
+    if (inf) {
+      let mats: any[] = [];
+      if (typeof inf.materiales_requeridos === 'string') {
+        try { mats = JSON.parse(inf.materiales_requeridos); } catch {}
+      } else if (Array.isArray(inf.materiales_requeridos)) {
+        mats = inf.materiales_requeridos;
+      }
+
+      mats.forEach(m => {
+        addManualItem('material', m.item || m.descripcion || 'Material técnico', Number(m.cantidad || 1), 'und', 0);
+      });
+
+      // Agregar mano de obra técnica
+      const horas = inf.horas_hombre_estimadas || inf.horas_estimadas || 2;
+      addManualItem('mano_de_obra', `Mano de obra especializada (${horas} horas aprox.)`, 1, 'serv', 0);
+    } else {
+      // Si no hay informe, agregar 1 partida en blanco
+      addManualItem('servicio', 'Servicio técnico especializado', 1, 'serv', 0);
+    }
+
+    renderManualItemsTable();
+    recalcManualTotals();
+
+    // Scroll hacia el cotizador
+    const container = document.getElementById('cotizador-manual-container');
+    container?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Listener para cambio en el selector de solicitud del cotizador
+  document.getElementById('manual-solicitud-select')?.addEventListener('change', (e: any) => {
+    const solId = parseInt(e.target.value, 10);
+    if (!solId) {
+      const clientInfo = document.getElementById('manual-client-info');
+      if (clientInfo) clientInfo.innerText = 'Cliente: Selecciona una solicitud arriba para ver sus datos';
+      return;
+    }
+    // Buscar si esta solicitud tiene un informe
+    const inf = allInformesList.find(i => Number(i.solicitud_id) === solId);
+    iniciarCotizacionManual(solId, inf ? Number(inf.id) : null);
+  });
+
+  // Funciones de la tabla de partidas manuales
+  function addManualItem(tipo: 'material' | 'mano_de_obra' | 'servicio' | 'viatico', desc: string, cant: number, und: string, pu: number) {
+    const id = 'item_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+    manualItems.push({
+      id,
+      tipo,
+      descripcion: desc,
+      cantidad: cant,
+      unidad: und || 'und',
+      precio_unitario: pu,
+      subtotal: cant * pu,
+    });
+    renderManualItemsTable();
+    recalcManualTotals();
+  }
+
+  function removeManualItem(id: string) {
+    manualItems = manualItems.filter(i => i.id !== id);
+    renderManualItemsTable();
+    recalcManualTotals();
+  }
+
+  function renderManualItemsTable() {
+    const tbody = document.getElementById('manual-items-tbody');
+    if (!tbody) return;
+
+    if (manualItems.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-400 italic">No hay partidas agregadas. Haz clic en "+ Agregar Fila" para cotizar.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = manualItems.map((item, idx) => `
+      <tr class="hover:bg-slate-50/60" data-row-id="${item.id}">
+        <td class="py-2 px-3 w-36">
+          <select class="item-tipo w-full p-1.5 rounded-lg border border-slate-200 bg-white font-medium text-[11px] focus:ring-1 focus:ring-yeleblue focus:outline-none">
+            <option value="material" ${item.tipo === 'material' ? 'selected' : ''}>Material</option>
+            <option value="mano_de_obra" ${item.tipo === 'mano_de_obra' ? 'selected' : ''}>Mano de Obra</option>
+            <option value="servicio" ${item.tipo === 'servicio' ? 'selected' : ''}>Servicio</option>
+            <option value="viatico" ${item.tipo === 'viatico' ? 'selected' : ''}>Viático / Movilidad</option>
+          </select>
+        </td>
+        <td class="py-2 px-3">
+          <input 
+            type="text" 
+            class="item-desc w-full p-1.5 rounded-lg border border-slate-200 bg-white font-medium focus:ring-1 focus:ring-yeleblue focus:outline-none" 
+            placeholder="Descripción del concepto o partida" 
+            value="${item.descripcion}" 
+          />
+        </td>
+        <td class="py-2 px-3 w-20 text-center">
+          <input 
+            type="number" 
+            min="0.1" 
+            step="0.5" 
+            class="item-cant w-full p-1.5 rounded-lg border border-slate-200 bg-white font-bold text-center focus:ring-1 focus:ring-yeleblue focus:outline-none" 
+            value="${item.cantidad}" 
+          />
+        </td>
+        <td class="py-2 px-3 w-28 text-right">
+          <input 
+            type="number" 
+            min="0" 
+            step="1" 
+            class="item-pu w-full p-1.5 rounded-lg border border-slate-200 bg-white text-right font-bold text-slate-800 focus:ring-1 focus:ring-yeleblue focus:outline-none" 
+            placeholder="0.00" 
+            value="${item.precio_unitario || ''}" 
+          />
+        </td>
+        <td class="py-2 px-3 w-28 text-right font-extrabold text-yeledarkblue item-subtotal">
+          S/. ${item.subtotal.toFixed(2)}
+        </td>
+        <td class="py-2 px-2 w-10 text-center">
+          <button 
+            type="button" 
+            class="btn-del-item text-slate-400 hover:text-red-600 transition p-1 cursor-pointer font-bold inline-flex items-center justify-center" 
+            title="Quitar fila"
+          >
+            ✕
+          </button>
+        </td>
+      </tr>
+    `).join('');
+
+    // Bindeo de inputs en la tabla
+    tbody.querySelectorAll('tr').forEach(tr => {
+      const rowId = tr.getAttribute('data-row-id');
+      const item = manualItems.find(i => i.id === rowId);
+      if (!item) return;
+
+      const tipoEl = tr.querySelector('.item-tipo') as HTMLSelectElement;
+      const descEl = tr.querySelector('.item-desc') as HTMLInputElement;
+      const cantEl = tr.querySelector('.item-cant') as HTMLInputElement;
+      const puEl = tr.querySelector('.item-pu') as HTMLInputElement;
+      const subtotalEl = tr.querySelector('.item-subtotal') as HTMLElement;
+      const delBtn = tr.querySelector('.btn-del-item') as HTMLElement;
+
+      const updateRow = () => {
+        item.tipo = tipoEl.value as any;
+        item.descripcion = descEl.value.trim();
+        item.cantidad = parseFloat(cantEl.value) || 0;
+        item.unidad = 'und';
+        item.precio_unitario = parseFloat(puEl.value) || 0;
+        item.subtotal = item.cantidad * item.precio_unitario;
+
+        if (subtotalEl) subtotalEl.innerText = `S/. ${item.subtotal.toFixed(2)}`;
+        recalcManualTotals();
+      };
+
+      tipoEl?.addEventListener('change', updateRow);
+      descEl?.addEventListener('input', updateRow);
+      cantEl?.addEventListener('input', updateRow);
+      puEl?.addEventListener('input', updateRow);
+
+      delBtn?.addEventListener('click', () => {
+        if (rowId) removeManualItem(rowId);
+      });
+    });
+  }
+
+    // Recalcular Totales
+  function recalcManualTotals() {
+    let subMat = 0;
+    let subLabor = 0;
+    let subOtros = 0;
+
+    manualItems.forEach(item => {
+      if (item.tipo === 'material') {
+        subMat += item.subtotal;
+      } else if (item.tipo === 'mano_de_obra') {
+        subLabor += item.subtotal;
+      } else {
+        subOtros += item.subtotal;
+      }
+    });
+
+    const opsVal = parseFloat((document.getElementById('calc-ops') as HTMLInputElement)?.value) || 0;
+    const discountVal = parseFloat((document.getElementById('calc-discount') as HTMLInputElement)?.value) || 0;
+    const includeIgv = (document.getElementById('calc-include-igv') as HTMLInputElement)?.checked ?? true;
+
+    const baseImponible = Math.max(0, (subMat + subLabor + subOtros + opsVal) - discountVal);
+    const igvVal = includeIgv ? baseImponible * 0.18 : 0;
+    const totalVal = baseImponible + igvVal;
+
+    const subMatEl = document.getElementById('calc-sub-mat');
+    const subLaborEl = document.getElementById('calc-sub-labor');
+    const igvEl = document.getElementById('calc-igv');
+    const totalEl = document.getElementById('calc-total');
+
+    if (subMatEl) subMatEl.innerText = `S/. ${subMat.toFixed(2)}`;
+    if (subLaborEl) subLaborEl.innerText = `S/. ${(subLabor + subOtros).toFixed(2)}`;
+    if (igvEl) igvEl.innerText = `S/. ${igvVal.toFixed(2)}`;
+    if (totalEl) totalEl.innerText = `S/. ${totalVal.toFixed(2)}`;
+  }
+
+  // Listeners para inputs de totales
+  document.getElementById('calc-ops')?.addEventListener('input', recalcManualTotals);
+  document.getElementById('calc-discount')?.addEventListener('input', recalcManualTotals);
+  document.getElementById('calc-include-igv')?.addEventListener('change', recalcManualTotals);
+
+  // Botón Agregar Fila
+  document.getElementById('btn-add-item-row')?.addEventListener('click', () => {
+    addManualItem('material', '', 1, 'und', 0);
+  });
+
+  // Botón Limpiar Cotizador
+  document.getElementById('btn-limpiar-cotizador')?.addEventListener('click', () => {
+    if (confirm('¿Deseas vaciar todas las partidas y empezar una cotización en blanco?')) {
+      manualItems = [];
+      addManualItem('servicio', '', 1, 'serv', 0);
+      recalcManualTotals();
+    }
+  });
+
+  // Botón Emitir Cotización Manual
+  document.getElementById('btn-emit-manual-quote')?.addEventListener('click', async () => {
+    const alertBox = document.getElementById('manual-quote-alert');
+    const emitBtn = document.getElementById('btn-emit-manual-quote') as HTMLButtonElement;
+    if (alertBox) alertBox.classList.add('hidden');
+
+    const sel = document.getElementById('manual-solicitud-select') as HTMLSelectElement;
+    const solicitudId = parseInt(sel?.value, 10);
+
+    if (!solicitudId) {
+      if (alertBox) {
+        alertBox.innerText = 'Selecciona primero una Cita / Solicitud a la cual emitir esta cotización.';
+        alertBox.className = 'p-3 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-semibold';
+        alertBox.classList.remove('hidden');
+      }
+      sel?.focus();
+      return;
+    }
+
+    if (manualItems.length === 0) {
+      if (alertBox) {
+        alertBox.innerText = 'Debes agregar al menos una partida o concepto a cotizar.';
+        alertBox.className = 'p-3 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-semibold';
+        alertBox.classList.remove('hidden');
+      }
+      return;
+    }
+
+    // Validar que los items tengan descripción y precio
+    for (const it of manualItems) {
+      if (!it.descripcion) {
+        if (alertBox) {
+          alertBox.innerText = 'Todas las partidas deben tener una descripción clara.';
+          alertBox.className = 'p-3 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-semibold';
+          alertBox.classList.remove('hidden');
+        }
+        return;
+      }
+    }
+
+    // Calcular montos finales
+    let subMat = 0;
+    let subLabor = 0;
+    manualItems.forEach(i => {
+      if (i.tipo === 'material') subMat += i.subtotal;
+      else subLabor += i.subtotal;
+    });
+
+    const opsVal = parseFloat((document.getElementById('calc-ops') as HTMLInputElement)?.value) || 0;
+    const discountVal = parseFloat((document.getElementById('calc-discount') as HTMLInputElement)?.value) || 0;
+    const includeIgv = (document.getElementById('calc-include-igv') as HTMLInputElement)?.checked ?? true;
+
+    const baseImponible = Math.max(0, (subMat + subLabor + opsVal) - discountVal);
+    const igvVal = includeIgv ? baseImponible * 0.18 : 0;
+    const totalVal = baseImponible + igvVal;
+
+    if (totalVal <= 0) {
+      if (alertBox) {
+        alertBox.innerText = 'El total de la cotización debe ser mayor a 0 soles.';
+        alertBox.className = 'p-3 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-semibold';
+        alertBox.classList.remove('hidden');
+      }
+      return;
+    }
+
+    const validityVal = parseInt((document.getElementById('manual-validity') as HTMLInputElement)?.value, 10) || 15;
+    const deliveryVal = (document.getElementById('manual-delivery') as HTMLInputElement)?.value.trim() || '2 a 3 días hábiles';
+    const paymentVal = (document.getElementById('manual-payment') as HTMLInputElement)?.value.trim() || '50% adelanto y 50% conformidad';
+    const notesVal = (document.getElementById('manual-notes') as HTMLTextAreaElement)?.value.trim() || '';
+
+    try {
+      emitBtn.disabled = true;
+      emitBtn.classList.add('opacity-70');
+
+      const res = await fetch('/api/admin/emitir-cotizacion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          solicitud_id: solicitudId,
+          informe_id: activeInformeIdParaCotizar,
+          items: manualItems.map(i => ({
+            tipo: i.tipo,
+            descripcion: i.descripcion,
+            cantidad: i.cantidad,
+            unidad: i.unidad,
+            precio_unitario: i.precio_unitario,
+            subtotal: i.subtotal,
+          })),
+          subtotal_materiales: subMat,
+          subtotal_mano_obra: subLabor,
+          gastos_operativos: opsVal,
+          descuento: discountVal,
+          igv: igvVal,
+          total: totalVal,
+          dias_validez: validityVal,
+          tiempo_estimado_entrega: deliveryVal,
+          condiciones_pago: paymentVal,
+          observaciones_gerencia: notesVal,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      if (alertBox) {
+        alertBox.innerText = `¡Cotización formal emitida con éxito! Se ha notificado al cliente. Código: ${data.codigo_cotizacion}`;
+        alertBox.className = 'p-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold';
+        alertBox.classList.remove('hidden');
+      }
+
+      alert(`¡Cotización ${data.codigo_cotizacion} emitida con éxito! El cliente ya puede verla y responderla en su portal.`);
+      
+      await loadSolicitudes();
+      await loadInformes();
+
+    } catch (err: any) {
+      if (alertBox) {
+        alertBox.innerText = 'Error al emitir cotización: ' + err.message;
+        alertBox.className = 'p-3 rounded-xl bg-red-50 text-red-700 border border-red-200 text-xs font-semibold';
+        alertBox.classList.remove('hidden');
+      }
+    } finally {
+      emitBtn.disabled = false;
+      emitBtn.classList.remove('opacity-70');
+    }
+  });
+
+  // Helper de badges de estado
+  function formatCitaDate(val: string): string {
+    if (!val) return '';
+    const dateStr = String(val).split('T')[0];
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+    return dateStr;
+  }
+
+  // Helper de badges de estado
+  function getStatusBadge(status: string) {
+    const badges: Record<string, string> = {
+      pendiente: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 shadow-xs"><span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>Pendiente</span>',
+      asignada: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-yeleblue border border-blue-200 shadow-xs"><span class="h-1.5 w-1.5 rounded-full bg-yeleblue"></span>Asignada</span>',
+      en_camino: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200 shadow-xs"><span class="h-1.5 w-1.5 rounded-full bg-sky-500"></span>En Camino</span>',
+      en_sitio: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200 shadow-xs"><span class="h-1.5 w-1.5 rounded-full bg-purple-500"></span>En Sitio</span>',
+      informe_enviado: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-bold bg-orange-50 text-yeledarkorange border border-orange-200 shadow-xs"><span class="h-2 w-2 rounded-full bg-yeleorange animate-pulse"></span>Informe Enviado</span>',
+      cotizada: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>Cotizada</span>',
+      aprobada: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-300 shadow-xs"><span class="h-1.5 w-1.5 rounded-full bg-teal-600"></span>Aprobada por Cliente</span>',
+      rechazada: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200 shadow-xs"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>Rechazada</span>',
+      completada: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-yeledarkblue border border-blue-200 shadow-xs"><span class="h-1.5 w-1.5 rounded-full bg-yeledarkblue"></span>Completada</span>',
+      cancelada: '<span class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">Cancelada</span>',
+    };
+    return badges[status] || `<span class="inline-flex items-center justify-center whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">${status}</span>`;
+  }
+
+  // Modal Nuevo Técnico
+  const techModal = document.getElementById('tech-modal');
+  const openTechBtn = document.getElementById('open-tech-modal-btn');
+  const closeTechBtn = document.getElementById('close-tech-modal');
+  const cancelTechBtn = document.getElementById('cancel-tech-modal');
+  const techForm = document.getElementById('nuevo-tecnico-form') as HTMLFormElement;
+  const techModalAlert = document.getElementById('tech-modal-alert');
+
+  openTechBtn?.addEventListener('click', () => {
+    techModal?.classList.remove('hidden');
+  });
+
+  function closeTechModal() {
+    techModal?.classList.add('hidden');
+    techForm?.reset();
+    if (techModalAlert) techModalAlert.classList.add('hidden');
+  }
+
+  closeTechBtn?.addEventListener('click', closeTechModal);
+  cancelTechBtn?.addEventListener('click', closeTechModal);
+
+  techForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('submit-tech-btn') as HTMLButtonElement;
+
+    const nombres = (document.getElementById('tech-names') as HTMLInputElement).value.trim();
+    const apellidos = (document.getElementById('tech-lastnames') as HTMLInputElement).value.trim();
+    const email = (document.getElementById('tech-email') as HTMLInputElement).value.trim();
+    const telefono = (document.getElementById('tech-phone') as HTMLInputElement).value.trim();
+    const especialidad = (document.getElementById('tech-specialty') as HTMLSelectElement).value;
+    const password = (document.getElementById('tech-password') as HTMLInputElement).value;
+
+    if (!/^9\d{8}$/.test(telefono)) {
+      if (techModalAlert) {
+        techModalAlert.innerText = 'El teléfono debe tener 9 dígitos y empezar con 9 (versión Perú).';
+        techModalAlert.className = 'p-3 rounded-xl font-medium bg-red-50 text-red-700 border border-red-200 text-xs';
+        techModalAlert.classList.remove('hidden');
+      }
+      return;
+    }
+
+    try {
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-70');
+
+      const res = await fetch('/api/admin/crear-tecnico', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombres,
+          apellidos,
+          email,
+          telefono,
+          especialidad,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Error al crear técnico');
+
+      alert(`¡Técnico ${nombres} ${apellidos} registrado exitosamente!`);
+      closeTechModal();
+      await reloadTechnicians();
+      await loadSolicitudes();
+    } catch (err: any) {
+      if (techModalAlert) {
+        techModalAlert.innerText = err.message;
+        techModalAlert.className = 'p-3 rounded-xl font-medium bg-red-50 text-red-700 border border-red-200 text-xs';
+      }
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('opacity-70');
+    }
+  });
+
+  // Chat con Cliente Logic
+  const adminChatModal = document.getElementById('admin-chat-modal');
+  const adminChatTitle = document.getElementById('admin-chat-title');
+  const adminChatMessages = document.getElementById('admin-chat-messages');
+  const adminChatForm = document.getElementById('admin-chat-form') as HTMLFormElement;
+  const adminChatSolIdInput = document.getElementById('admin-chat-solicitud-id') as HTMLInputElement;
+  const adminChatInput = document.getElementById('admin-chat-input') as HTMLInputElement;
+
+  async function openAdminChat(solicitudId: string, clientName: string) {
+    if (adminChatSolIdInput) adminChatSolIdInput.value = solicitudId;
+    if (adminChatTitle) adminChatTitle.innerText = `Trámite #${solicitudId} — Cliente: ${clientName}`;
+    adminChatModal?.classList.remove('hidden');
+    await loadAdminChatMessages(solicitudId);
+  }
+
+  async function loadAdminChatMessages(solicitudId: string) {
+    if (!adminChatMessages) return;
+    adminChatMessages.innerHTML = `<div class="p-4 text-center text-slate-400 text-xs">Cargando mensajes...</div>`;
+
+    let msgs: any[] = [];
+    try {
+      const res = await fetch(`/api/portal/mensajes?solicitud_id=${solicitudId}`);
+      const data = await res.json();
+      msgs = data.mensajes || [];
+    } catch (err) {
+      console.error('Error al cargar mensajes:', err);
+    }
+
+    if (msgs.length === 0) {
+      adminChatMessages.innerHTML = `<div class="p-4 text-center text-slate-400 italic text-xs">No hay mensajes previos en esta solicitud. Envíale un mensaje o actualización al cliente.</div>`;
+      return;
+    }
+
+    adminChatMessages.innerHTML = msgs.map(m => `
+      <div class="flex flex-col ${m.remitente_rol === 'gerencia' ? 'items-end' : 'items-start'}">
+        <div class="max-w-[85%] p-3 rounded-2xl shadow-2xs ${m.remitente_rol === 'gerencia' ? 'bg-yeleblue text-white rounded-br-none' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-none'}">
+          <p class="text-[10px] font-bold ${m.remitente_rol === 'gerencia' ? 'text-orange-200' : 'text-yeleblue'} mb-0.5">
+            ${m.remitente_rol === 'gerencia' ? 'Gerencia YELE (Tú)' : 'Cliente'}
+          </p>
+          <p class="leading-relaxed">${m.mensaje}</p>
+        </div>
+        <span class="text-[9px] text-slate-400 mt-0.5 px-1">${new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+      </div>
+    `).join('');
+
+    adminChatMessages.scrollTop = adminChatMessages.scrollHeight;
+  }
+
+  document.getElementById('close-admin-chat')?.addEventListener('click', () => {
+    adminChatModal?.classList.add('hidden');
+  });
+
+  adminChatForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const solId = parseInt(adminChatSolIdInput.value);
+    const text = adminChatInput.value.trim();
+    if (!text) return;
+
+    try {
+      const res = await fetch('/api/portal/enviar-mensaje', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ solicitud_id: solId, mensaje: text }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error);
+      adminChatInput.value = '';
+      await loadAdminChatMessages(String(solId));
+    } catch (err: any) {
+      alert('Error al enviar mensaje: ' + err.message);
+    }
+  });
+
+  // Logout
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    await logoutUser();
+  });
+
+  // Ejecución inicial
+  checkAdminAuth();
+</script>
+
+    </Layout>
